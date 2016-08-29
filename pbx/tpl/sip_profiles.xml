@@ -1,0 +1,95 @@
+﻿<?xml version="1.0"?>
+<!-- 直接替换式-->
+<include>
+	{% for sipprofile  in profiles %}
+	<profile name="sipinterface_{{ sipprofile.id }}">
+		<domains>
+			<domain name="all" alias="true" parse="false"/>
+		</domains>
+		<settings>
+			<param name="sip-ip" value='{{ sipprofile.ip_address or "$${local_ip_v4}" }}'/>
+			<param name="sip-port" value='{{ sipprofile.sip_port or "5060" }}'/>
+			<param name="ext-rtp-ip" value="{{ sipprofile.get_ext_ip() }}"/>
+			<param name="ext-sip-ip" value="{{ sipprofile.get_ext_ip() }}"/>
+			<param name="rtp-ip" value='{{ sipprofile.ip_address or "$${local_ip_v4}" }}'/>
+			<param name="auth-calls" value="{{ sipprofile.auth_calls|string|lower }}"/>
+			<param name="enable-timer" value="false"/>
+			<param name="user-agent-string" value="OE+ PBX"/>
+			<param name="context" value="context_{{ sipprofile.context.id }}"/>
+			<param name="rtp-timer-name" value="{{ sipprofile.rtp_timer_name }}"/>
+			<param name="codec-prefs" value="{{ sipprofile.codec_prefs }}"/>
+			<param name="inbound-codec-negotiation" value="{{ sipprofile.inbound_codec_negotiation }}"/>
+			<param name="inbound-reg-force-matching-username" value="true"/>
+			<param name="nonce-ttl" value="{{ sipprofile.nonce_ttl }}"/>
+			<param name="manage-presence" value="{{ sipprofile.manage_presence|string|lower }}"/>
+			<!--添加-->
+			{% if sipprofile.nat_net_list: %}
+			<param name="apply-nat-acl" value="{{ sipprofile.nat_net_list.get_name() }}"/>
+			{% endif %}
+			{% if sipprofile.inbound_net_list: %}
+			<param name="apply-inbound-acl" value="{{ sipprofile.inbound_net_list.get_name() }}"/>
+			{% endif %}
+			{% if sipprofile.register_net_list: %}
+			<param name="apply-register-acl" value="{{ sipprofile.register_net_list.get_name() }}"/>
+			{% endif %}
+			{#<!--
+			<param name="odbc-dsn" value="{{ odbc_credentials } }}"/>
+			<param name="dbname" value="{{ sipprofile.presence_db_name }}"/>
+			<param name="presence-hosts" value="{{ sipprofile.presence_hosts }}"/>
+			<param name="send-presence-on-register" value="{{ str(sipprofile.send_presence_on_register).lower() }}"/>
+			<param name="delete-subs-on-register" value="{{ str(sipprofile.delete_subs_on_register).lower() }}"/>
+			<param name="caller-id-type" value="{{ sipprofile.caller_id_type }}"/>
+			<param name="auto-jitterbuffer-msec" value="{{ sipprofile.auto_jitterbuffer_msec }}"/>
+			<param name="dialplan" value="XML,enum"/>
+			<param name="use-rtp-timer" value="{{ str(sipprofile.use_rtp_timer).lower() }}"/>
+			<param name="rtp-timeout-sec" value="{{ sipprofile.rtp_timeout_sec }}"/>
+			<param name="rtp-hold-timeout-sec" value="{{ sipprofile.rtp_hold_timeout_sec }}"/>
+			<param name="rfc2833-pt" value="{{ sipprofile.rfc2833_pt }}"/>
+			<param name="dtmf-duration" value="{{ sipprofile.dtmf_duration }}"/>
+			<param name="dtmf-type" value="{{ sipprofile.dtmf_type }}"/>
+			<param name="session-timeout" value="{{ sipprofile.session_timeout }}"/>
+			<param name="codec-ms" value="{{ sipprofile.codec_ms }}"/>
+			<param name="accept-blind-reg" value="{{ str(sipprofile.accept_blind_reg).lower() }}"/>
+			<param name="enable-100rel" value="true"/>
+			<param name="multiple-registrations" value="{{ sipprofile.multiple_registrations }}"/>
+			<param name="minimum-session-expires" value="{{ sipprofile.minimum_session_expires }}"/>
+			<param name="mailer-app" value="/usr/local/freeswitch/script/emailvm.py"/>
+			<param name="mailer-app-args" value="-i -d -f {{ sipprofile.vm_from_email}.org.com -t"/>
+			<param name="disable-register" value="{{ str(sipprofile.disable_register).lower() }}"/>
+			<param name="log-auth-failures" value="{{ str(sipprofile.log_auth_failures).lower() }}"/>
+			<param name="auth-all-packets" value="{{ str(sipprofile.auth_all_packets).lower() }}"/>
+			<param name="mailer-app" value="/usr/local/freeswitch/scripts/emailvm.py"/>
+			<param name="mailer-app-args" value="-i -d -f voicemail@vwna.com -t"/>-->#}
+		</settings>
+		<gateways>
+			{% for gateway  in sipprofile.gateways %}
+			<gateway name="trunk_{{ gateway.id }}">
+				{#<!--
+				<variables>
+				    <variable name="both_var_name" data="gw={{ gateway.name }}"/>
+				</variables>-->#}
+				<param name="username" value="{{ gateway.username }}"/>
+				<param name="password" value="{{ gateway.password }}"/>
+				<param name="register" value="{{ gateway.register|string|lower }}"/>
+				{% if gateway.realm: %}
+				<param name="realm" value="{{ gateway.realm }}"/>
+				{% endif %}
+				{#<!--
+				<param py:if="gateway.from_user" name="from-user" value="{{ gateway.from_user }}"/>
+				<param py:if="gateway.from_domain" name="from-domain" value="{{ gateway.from_domain }}"/>
+				<param py:if="gateway.extension" name="extension" value="{{ gateway.get_extension() }}"/>
+				<param py:if="gateway.proxy" name="proxy" value="{{ gateway.proxy }}"/>
+				<param py:if="gateway.register_proxy" name="register-proxy" value="{{ gateway.register_proxy }}"/>
+				<param py:if="gateway.expire_seconds" name="expire-seconds" value="{{ gateway.expire_seconds }}"/>
+				<param py:if="gateway.register_transport" name="register-transport" value="{{ gateway.register_transport }}"/>
+				<param name="retry-seconds" value="{{ gateway.retry_seconds }}"/>
+				<param py:if="gateway.caller_id_in_from" name="caller-id-in-from" value="{{ str(gateway.caller_id_in_from).lower() }}"/>
+				<param py:if="gateway.contact_params" name="contact-params" value="{{ gateway.contact_params }}"/>
+				<param name="rfc5626" value="{{ str(gateway.rfc5626).lower() }}"/>
+				<param name="ping" value="{{ gateway.ping }}"/>-->#}
+			</gateway>
+			{% endfor %}
+		</gateways>
+	</profile>
+	{% endfor %}
+</include>

@@ -1,0 +1,6 @@
+    <extension name="conditioning_callerid" continue="true">
+      <condition field="${internal_caller_id_number}" expression="^.+$">
+        <action application="set" data="effective_caller_id_name=${internal_caller_id_name}"/>
+        <action application="set" data="effective_caller_id_number=${internal_caller_id_number}"/>
+      </condition>
+    </extension>

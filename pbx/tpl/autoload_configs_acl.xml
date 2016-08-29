@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<include>
+  <configuration name="acl.conf" description="Network Lists">
+    <network-lists>
+	{% for bl  in netlist %}
+		<list name="{{ bl.get_name() }}" default="{{ bl.default_type }}">
+			{% for iteam  in bl.items %}
+			<node bluebox="net_list_item_{{ iteam.id }}" type="{{ iteam.type }}" cidr="{{ iteam.record }}"/>
+			{% endfor %}
+		</list>
+	{% endfor %}
+	
+	{#<!--
+      <list name="net_list_1" default="deny"/>
+      <list name="net_list_2" default="deny"/>
+      <list name="net_list_3" default="deny"/>
+      <list name="net_list_4" default="deny"/>
+      <list name="net_list_5" default="deny"/>
+      <list name="net_list_6" default="allow">
+        <node bluebox="net_list_item_1" type="allow" cidr="0.0.0.0/0"/>
+      </list>
+      <list name="net_list_7" default="allow">
+        <node bluebox="net_list_item_2" type="allow" cidr="127.0.0.1/32"/>
+      </list>-->#}
+	  </network-lists>
+  </configuration>
+</include>

@@ -1,0 +1,23 @@
+    {% for object in context.timeroutes %}
+	<extension name="main_number_{{ object.number.id }}" continue="true">
+      <condition field="destination_number" expression="^{{ object.number.number }}$">
+		{% if object.number.terminate_action != 'hangup' %}
+        <action application="set" bluebox="settingEndBridge" data="hangup_after_bridge=true"/>
+        <action application="set" bluebox="settingFail" data="continue_on_fail=true"/>
+		{% endif %}
+      <condition wday="2,4,6,7" minute-of-day="480-1080">
+        <action application="transfer" data="{{ object.get_during_transger_number() }} XML context_{{ context.id }}"/>
+        <anti-action application="transfer" data="{{ object.get_outside_transger_number() }} XML context_{{ context.id }}"/>
+      </condition>
+		{% if object.number.terminate_action == 'voicemail' %}
+        <action application="answer"/>
+        <action application="voicemail" data="default voicemail_{{ object.voicemail_id }} {{ object.number.get_vm_number() }}"/>
+		<action application="hangup"/>
+		{% elif object.number.terminate_action =='transfer' %} 
+		<action application="transfer" data="{{ object.number.get_transfer_number() }} XML context_{{ context.id }}"/>
+		{% else %}
+        <action application="hangup"/>
+		{% endif %}
+      </condition>
+    </extension>
+	{% endfor %}

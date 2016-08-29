@@ -1,0 +1,96 @@
+﻿<?xml version="1.0"?>
+<!-- 直接替换式-->
+<include>
+  {% for location  in locations %}
+  <domain name="$${location_{{ location.id }}}">
+    <groups>
+      <group name="default">
+        <users>
+          {% for endpoint  in location.devices %}
+          <user bluebox_id="{{ endpoint.id }}" id="{{ endpoint.number.number }}">
+            <params>
+	            <param name='password' value='{{ endpoint.sip_password }}'/>
+                <param name="dial-string" value="{presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(${dialed_user}@${dialed_domain})}"/>
+				{#<!--
+	            <param name='vm-password' value='{{ endpoint.voicemai.vm_password }}'/>
+	            <param py:if="endpoint.voicemai" name="vm-mailto" value="{{ endpoint.voicemai.vm_email }}"/>
+	            <param py:if="endpoint.voicemai" name="vm-email-all-messages" value="{{ str(endpoint.voicemai.vm_attach_email).lower() }}"/>
+	            <param py:if="endpoint.voicemai" name="vm-attach-file" value="{{ str(endpoint.voicemai.vm_attach_file).lower() }}"/>
+	            <param py:if="endpoint.voicemai" name="vm-keep-local-after-email" value="{{ str(not endpoint.voicemai.registry_delete_file).lower() }}"/>
+	            <param py:if="endpoint.voicemai" name="vm-notify-email-all-messages"  value="{{ str(endpoint.voicemai.vm_notify_email).lower() }}"/>
+	            <param name="vm-message-ext" value="mp3"/>-->#}
+            </params>
+            <variables>
+            	{% if endpoint.outbound_caller_id_name %}
+	            <variable name="outbound_caller_id_name" value="{{ endpoint.outbound_caller_id_name }}"/>
+				{% endif %}
+				{% if endpoint.outbound_caller_id_number %}
+	            <variable name="outbound_caller_id_number" value="{{ endpoint.outbound_caller_id_number }}"/>
+				{% endif %}
+				{% if endpoint.internal_caller_id_name %}
+	            <variable name="internal_caller_id_name" value="{{ endpoint.internal_caller_id_name }}"/>
+				{% endif %}
+				{% if endpoint.internal_caller_id_number %}
+	            <variable name="internal_caller_id_number" value="{{ endpoint.internal_caller_id_number }}"/>
+				{% endif %}
+	            <variable name="user_context" value="context_{{ endpoint.context.id }}"/>
+	            <variable name="force_transfer_context" value="context_{{ endpoint.context.id }}"/>
+	            <variable name="user_originated" value="true"/>
+	            <variable name="toll_allow" value="domestic,international,local"/>
+				
+	            <variable name="accountcode" value="{{ endpoint.number.number }}"/>
+				{#<!--
+	            <variable py:if="endpoint.sip_force_contact" name='sip-force-contact' value='{{ endpoint.sip_force_contact }}'/>
+	            <variable name="record_stereo" value="false"/>
+	            <variable name="sip-allow-multiple-registrations" value="false"/>                                        
+	            <variable name="default_gateway" value="voipinnovations"/>
+	            <variable name="presence_id" value="{{ endpoint.number.number }}@${c.domain}"/>
+	            <variable py:if="endpoint.transfer_fallback_extension"  name="transfer_fallback_extension" value="{{ endpoint.transfer_fallback_extension }}"/>
+				-->#}
+            </variables>
+          </user>
+		  {% endfor %}
+        </users>
+      </group>
+    </groups>
+  </domain>
+  {% endfor %}
+  {% for vm  in voicemails %}
+  <domain name="voicemail_{{ vm.id }}">
+    <groups>
+      <group name="default">
+        <users>
+          <user bluebox_id="{{ vm.id }}" id="{{ vm.number.number }}">
+            <params>
+	            <param name='vm-password' value='{{ vm.vm_password }}'/>
+                <param name="sip-forbid-register" value="true"/>
+			    <param name="vm-message-ext" value="mp3"/>
+	            <param name="vm-email-all-messages" value="{{ vm.vm_attach_email|string|lower }}"/>
+				{% if vm.vm_attach_email %}
+	            <param name="vm-mailto" value="{{ vm.vm_email }}"/>
+				<param name="email-addr" value="{{ vm.vm_email }}"/>
+	            <param name="vm-attach-file" value="{{ vm.vm_attach_file|string|lower }}"/>
+				<param name="vm-delete-file" value="{{ vm.vm_delete_file|string|lower }}"/>
+				{% endif %}
+
+				{#<!--
+	            <param py:if="vm.vm_save" name="vm-keep-local-after-email" value="{{ str(not vm.registry_delete_file).lower() }}"/>
+	            <param py:if="vm.vm_notify_email" name="vm-notify-email-all-messages"  value="{{ str(vm.vm_notify_email).lower() }}"/>
+	            <param name='password' value='VIRTUALMAILBOX_NOREG'/>-->#}
+            </params>
+            <variables>
+              <variable name="timezone" value="{{ vm.timezone }}"/>
+			  {#<!--
+	            <variable name="accountcode" value="{{ vm.number.number }}"/>
+	            <variable name="user_context" value="context_{{ endpoint.context.id }}"/>
+	            <variable name="vm_extension" value="{{ vm.number.number }}"/>
+	            <variable name="presence_id" value="$${vm.number.number}@${c.domain}"/>
+	            <variable name="mailbox" value="{{ vm.number.number }}"/>-->#}
+            </variables>
+          </user>
+        </users>
+      </group>
+    </groups>
+  </domain>
+  {% endfor %}
+</include>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<include>
+  <section name="odbc">
+    <X-PRE-PROCESS cmd="set" bluebox="odbc_1" data="odbc_1={{ odbc_credentials }}"/>
+  </section>
+</include>

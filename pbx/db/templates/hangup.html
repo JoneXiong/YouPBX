@@ -1,0 +1,47 @@
+{% extends "admin/models/base.html" %}
+
+{% block main_menu %}
+{% endblock %}
+
+{% block custom_bar %}
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumb %}
+<ul class="breadcrumb">
+	<li><span class="divider"></span></li>
+</ul>
+{% endblock %}
+
+{% block pre_content %}
+  <ul class="nav nav-tabs">
+    <li class="{% block tab_index_class %}{% endblock %}"><a href="/?{{ request.query_string }}">{{ model_admin.get_display_name()|fix_underscores }} ({{ model_admin.get_query().count() }})</a></li>
+	<li class="active"><a href=".">挂断</a></li>
+    {% block extra_tabs %}{% endblock %}
+  </ul>
+{% endblock %}
+
+{% block content %}
+  <form action="." class="form-horizontal" method="post">
+  	    <input type="hidden" name="id" value="" />
+    <fieldset>
+      <legend>确定挂断</legend>
+      <ul>
+          <li>
+              <span><a href="#">{{ instance }}</a></span>
+          </li>
+      </ul>
+	 <br/><br/>
+	{% from 'macros/forms.html' import with_errors %}
+
+      <div class="form-actions">
+        <button class="btn btn-danger" type="submit">提交</button>&nbsp;&nbsp;
+        <a class="btn" href="/?{{ request.query_string }}">取消</a>
+      </div>
+    </fieldset>
+  </form>
+{% endblock %}

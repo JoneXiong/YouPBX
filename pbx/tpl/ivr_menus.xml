@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<include>
+	{% for menu  in menus %}
+	<menu name="auto_attendant_{{ menu.id }}" 
+			{%  if menu.registry_type=='audio': %}
+			greet-long="{{ menu.registry_mediafile.path }}" 
+			greet-short="{{ menu.registry_mediafile.path }}" 
+			{% else %}
+			tts-engine="cepstral" 
+			tts-voice="Allison-8kHz"
+			greet-long="say:{{ menu.registry_tts_string }}" 
+			greet-short="say:{{ menu.registry_tts_string }}" 
+			{% endif %}
+			timeout={{ menu.timeout }}* 1000
+			inter-digit-timeout={{ menu.digit_timeout }}* 1000
+			digit-len={{ extension_digits }}
+			max-failures="{{ menu.registry_max_failures }}" >
+		{% for keymapping  in keymapping_ids %}
+		{% if loop.first %}
+		<entry action="menu-exec-app" name="catch_all" digits="/^([0-9]{{ '{' ~ extension_digits ~ '}' }})$/" param="execute_extension $1 XML context_{{ keymapping.number.context_id }}" />
+		{% endfor %}
+		<entry action="menu-exec-app" digits="{{ keymapping.digits }}" param="transfer {{ keymapping.number.number }} XML context_{{ keymapping.number.context_id }}"/>
+		{% endfor %}
+	</menu>
+	{% endfor %}
+</include>

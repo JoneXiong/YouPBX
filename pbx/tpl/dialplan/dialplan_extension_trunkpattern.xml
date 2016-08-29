@@ -1,0 +1,23 @@
+    {% for object  in context.trunkroutes %}
+	<extension name="main_trunk_{{ object.trunk.id }}_pattern_{{ object.route.id }}" continue="true">
+      <condition field="destination_number" expression="{{ object.route.get_expression() }}" bluebox="pattern_{{ object.route.id }}">
+        <action application="set" bluebox="prepend" data="prepend={{ object.prepend }}"/>
+		{% if object.trunk.simpleroute_caller_id_name %}
+        <action application="set" bluebox="cid_name" data="effective_caller_id_name={{ object.trunk.simpleroute_caller_id_name }}"/>
+		{% endif %}
+		{% if object.trunk.simpleroute_caller_id_number %}
+        <action application="set" bluebox="cid_number" data="effective_caller_id_number={{ object.trunk.simpleroute_caller_id_number }}"/>
+		{% endif %}
+      </condition>
+      <condition field="${outbound_caller_id_number}" expression="^.+$" break="never" bluebox="caller_id">
+        <action application="set" data="effective_caller_id_name=${outbound_caller_id_name}"/>
+        <action application="set" data="effective_caller_id_number=${outbound_caller_id_number}"/>
+		{% if object.trunk.sip_caller_id_field in ('rpid', 'pid') %}
+        <action application="export" bluebox="caller_id_field" data="sip_cid_type={{ object.trunk.sip_caller_id_field }}"/>
+		{% endif %}
+      </condition>
+      <condition field="destination_number" expression="{{ object.route.get_expression() }}" bluebox="pattern_{{ object.route.id }}_out">
+        <action application="bridge" bluebox="out_trunk_{{ object.trunk.id }}" data="sofia/gateway/trunk_{{ object.trunk.id }}/${prepend}$1"/>
+      </condition>
+    </extension>
+	{% endfor %}

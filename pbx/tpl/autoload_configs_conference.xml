@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<include>
+  <configuration name="conference.conf" description="Audio Conference">
+    <profiles>
+      {% for cf  in conferences %}
+      <profile name="conference_{{ cf.id }}">
+        <param name="rate" value="32000"/>
+        <param name="interval" value="20"/>
+        <param name="energy-level" value="{{ cf.registry_energy_level }}"/>
+        <param name="sound-prefix" value="$${sounds_dir}"/>
+        <param name="caller-controls" value="default"/>
+        <param name="tts-engine" value="tts-engine"/>
+        <param name="tts-voice" value="Allison-8kHz"/>
+        <param name="muted-sound" value="conference/conf-muted.wav"/>
+        <param name="mute-detect-sound" value=""/>
+        <param name="max-members" value=""/>
+        <param name="max-members-sound" value=""/>
+        <param name="comfort-noise" value="{{ cf.registry_comfort_noise and '1' or '0' }}"/>
+        <param name="suppress-events" value=""/>
+        <param name="verbose-events" value=""/>
+        <param name="unmuted-sound" value="conference/conf-unmuted.wav"/>
+        <param name="alone-sound" value="conference/conf-alone.wav"/>
+        <param name="moh-sound" value="local_stream://moh"/>
+        <param name="enter-sound " value="tone_stream://%(200,0,500,600,700)"/>
+        <param name="exit-sound" value="tone_stream://%(500,0,300,200,100,50,25)"/>
+        <param name="kicked-sound" value="conference/conf-kicked.wav"/>
+        <param name="locked-sound" value="conference/conf-locked.wav"/>
+        <param name="is-locked-sound" value="conference/conf-is-locked.wav"/>
+        <param name="is-unlocked-sound" value="conference/conf-is-unlocked.wav"/>
+        <param name="pin-sound" value="conference/conf-pin.wav"/>
+        <param name="bad-pin-sound" value="conference/conf-bad-pin.wav"/>
+		{% if cf.pin %}
+		<param name="pin" value="{{ cf.pin }}" />
+		{% endif %}
+      </profile>
+	  {% endfor %}
+    </profiles>
+  </configuration>
+</include>

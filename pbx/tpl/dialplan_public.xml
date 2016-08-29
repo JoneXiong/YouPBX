@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!-- 增加一个-->
+<include>
+	<context name="context_{{ context.id }}">
+		
+	<extension name="unloop">
+		<condition field="${unroll_loops}" expression="^true$"/>
+		<condition field="${sip_looped_call}" expression="^true$">
+			<action application="deflect" data="${destination_number}"/>
+		</condition>
+	</extension>
+	
+	<extension name="outside_call" continue="true">
+		<condition>
+			<action application="set" data="outside_call=true"/>
+			<action application="export" data="RFC2822_DATE=${strftime(%a, %d %b %Y %T %z)}"/>
+		</condition>
+	</extension>
+	
+	<extension name="call_debug" continue="true">
+		<condition field="${call_debug}" expression="^true$" break="never">
+			<action application="info"/>
+		</condition>
+	</extension>
+	
+	<extension name="public_extensions">
+		<condition field="destination_number" expression="^(10[01][0-9])$">
+			<action application="transfer" data="$1 XML default"/>
+		</condition>
+	</extension>
+
+	{% if context.tts_string or context.media_file %}
+	<extension name="end_notice_context_{{ context.id }}" continue="true">
+      <condition field="destination_number" expression="\d+">
+        <action application="answer"/>
+        <action application="sleep" data="1000"/>
+		{% if context.endtype=='tts': %}
+        <action application="playback" data="shout://translate.google.cn/translate_tts?tl=zh&ie=UTF-8&q=您好，您拨的号码无效，请查证后再拨！"/>
+		{% endif %}
+		{% if context.endtype=='audio': %}
+        <action application="playback" data="shout://translate.google.cn/translate_tts?tl=zh&ie=UTF-8&q=您好，您拨的号码无效，请查证后再拨！"/>
+		{% endif %}
+        <action application="sleep" data="1000"/>        
+        <action application="hangup"/>
+      </condition>
+    </extension>
+	{% endif %}
+  </context>
+</include>

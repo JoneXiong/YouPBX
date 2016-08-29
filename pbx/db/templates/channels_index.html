@@ -1,0 +1,86 @@
+{% extends "admin/models/base_filters.html" %}
+
+{% block tab_index_class %}active{% endblock %}
+
+{% block extra_tabs %}
+
+    <li class=""><a href="{{ url_for('admin.calls_dail') }}">拨号</a></li>
+
+    <li class="dropdown" style="float:right">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">操作... <span class="caret" /></a>
+      <ul class="dropdown-menu pull-right">
+      	{% if 'export' not in model_admin.method_exclude %}
+        <li><a href="#" onclick="Admin.index_submit('export');">导出</a></li>
+		{% endif %}
+		{% if 'delete' not in model_admin.method_exclude %}
+        <li><a href="#" onclick="Admin.index_submit('delete');">删除</a></li>
+		{% endif %}
+      </ul>
+    </li>
+    {% include "admin/includes/filter_dropdown.html" %}
+{% endblock %}
+
+{% block content %}
+  {% include "admin/includes/filter_widgets.html" %}
+
+  <form action="." class="form-horizontal" id="model-list" method="post"><input type="hidden" name="action" value="" />
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th class="check first shrink"><input type="checkbox" name="xxx" onchange="javascript:$('td input[type=checkbox]').attr('checked', this.checked);" /></th>
+        {% if model_admin.columns or model_admin.show_all_columns %}
+          {% for column in model_admin.columns or model_admin.get_columns() if column %}
+            {% if ordering == column %}
+              {% set sort_by = '-'+column %}
+            {% else %}
+              {% set sort_by = column %}
+            {% endif %}
+            <th>{% if model_admin.column_is_sortable(column) %}<a href="./?{{ update_querystring(request.query_string, 'ordering', sort_by)|safe() }}">{% endif %}{{ model_admin.get_column_display(column) }}{% if model_admin.column_is_sortable(column) %}</a>{% endif %}</th>
+          {% endfor %}
+        {% else %}
+          <th>{{ model_admin.get_display_name() }}</th>
+        {% endif %}
+
+        <th class="last shrink"></th>
+
+      </tr>
+    </thead>
+    <tbody>
+    {% for object in query.get_list() %}
+      <tr>
+        <td class="check"><input type="checkbox" name="id" value="{{ object.get_id() }}" /></td>
+        {% if model_admin.columns or model_admin.show_all_columns %}
+          {% for column in model_admin.columns or model_admin.get_columns() if column %}
+            {% if loop.index == 1 %}
+			  {% if model_admin.get_primary_key() %}
+              <td><a href="{% if 'edit' not in model_admin.method_exclude %}{{ url_for(model_admin.get_url_name('edit'), pk=object.get_id()) }}{% else %}#{% endif %}">{{ get_model_field(object, column) }}</a></td>
+			  {% else %}
+			  <td>{{ get_model_field(object, column) }}</td>
+			  {% endif %}
+            {% else %}
+              <td>{{ get_model_field(object, column) }}</td>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <td><a href="{% if 'edit' not in model_admin.method_exclude %}{{ url_for(model_admin.get_url_name('edit'), pk=object.get_id()) }}{% else %}#{% endif %}">{{ object }}</a></td>
+        {% endif %}
+
+        <td class="last links">
+          <ul class="inline">
+          	{% if 'edit' not in model_admin.method_exclude %}
+            <li><a href="{{ url_for(model_admin.get_url_name('edit'), pk=object.get_id()) }}">编辑</a></li>
+			{% endif %}
+			{% if 'delete' not in model_admin.method_exclude %}
+            <li><a href="{{ url_for(model_admin.get_url_name('delete'), id=object.get_id()) }}">删除</a></li>
+			{% endif %}
+			<li><a href="{{ url_for('admin.hangup', pk=object.uuid) }}">挂断</a></li>
+          </ul>
+        </td>
+
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </form>
+  {% include "admin/includes/pagination.html" %}
+{% endblock %}

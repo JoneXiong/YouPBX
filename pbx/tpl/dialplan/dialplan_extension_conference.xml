@@ -1,0 +1,23 @@
+    {% for object in context.conferences %}
+	<extension name="main_number_{{ object.number.id }}" continue="true">
+      <condition field="destination_number" expression="^{{ object.number.number }}$">
+		{% if object.number.terminate_action != 'hangup' %}
+        <action application="set" bluebox="settingEndBridge" data="hangup_after_bridge=true"/>
+        <action application="set" bluebox="settingFail" data="continue_on_fail=true"/>
+		{% endif %}
+        <action application="export" data="hold_music=silence"/>
+        <action application="answer"/>
+        <action application="sleep" data="1000"/>
+        <action application="conference" data="conference_{{ object.id }}@conference_{{ object.id }}"/>
+		{% if object.number.terminate_action == 'voicemail' %}
+        <action application="answer"/>
+        <action application="voicemail" data="default voicemail_{{ object.voicemail_id }} {{ object.number.get_vm_number() }}"/>
+		<action application="hangup"/>
+		{% elif object.number.terminate_action =='transfer' %} 
+		<action application="transfer" data="{{ object.number.get_transfer_number() }} XML context_{{ context.id }}"/>
+		{% else %}
+        <action application="hangup"/>
+		{% endif %}
+      </condition>
+    </extension>
+	{% endfor %}

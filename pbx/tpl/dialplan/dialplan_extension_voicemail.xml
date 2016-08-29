@@ -1,0 +1,21 @@
+    {% for object  in context.voicemails %}
+	<extension name="main_number_{{ object.number.id }}" continue="true">
+      <condition field="destination_number" expression="^{{ object.number.number }}$">
+      	{#
+		{% if object.number.terminate_action != 'hangup' %}<!--
+        <action application="set" bluebox="settingEndBridge" data="hangup_after_bridge=true"/>
+        <action application="set" bluebox="settingFail" data="continue_on_fail=true"/>-->
+		{% endif %} #}
+        <action application="answer"/>
+        <action application="sleep" data="1000"/>
+		{% if object.skipinstructions %}
+		<action application="set" data="skip_instructions=true"/>
+		{% endif %}
+		{% if object.skipgreeting %}
+		<action application="set" data="skip_greeting=true"/>
+		{% endif %}
+        <action application="voicemail" data="default voicemail_{{ object.id }} {{ object.number.number }}"/>
+        <action application="hangup"/>
+      </condition>
+    </extension>
+	{% endfor %}

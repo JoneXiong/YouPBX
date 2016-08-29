@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<include>
+  <section name="locations">
+  	{% for location  in locations %}
+    <X-PRE-PROCESS cmd="set" bluebox="location_{{ location.id }}" data="location_1={{ location.domain_name }}"/>
+	{% endfor %}
+  </section>
+</include>
