@@ -15,6 +15,11 @@ class Route(models.Model):
     
     def __unicode__(self):
         return self.name
+    
+    def get_expression(self):
+        convert = self.ptype==2
+        pattern_list = [ convert and '^%s$'%obj.content or obj.content  for obj in self.patterns.all() ]
+        return '|'.join(pattern_list)
 
 class RoutePattern(models.Model):
     

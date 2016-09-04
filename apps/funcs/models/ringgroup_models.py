@@ -12,7 +12,7 @@ class RingGroup(models.Model):
     
     class Meta:
         app_label = 'funcs'
-        verbose_name = u'来电队列'
+        verbose_name = u'呼叫队列'
         verbose_name_plural = verbose_name
     
     def __unicode__(self):
@@ -21,13 +21,13 @@ class RingGroup(models.Model):
     
 class RingGroupDevice(models.Model):
     
-    ring_group = models.ForeignKey(RingGroup, verbose_name="所属队列")
+    ring_group = models.ForeignKey(RingGroup, verbose_name="所属队列", related_name='members')
     orderby_int = models.IntegerField(u'排序' , blank=True, null=True)
     device = models.ForeignKey('funcs.Device', verbose_name="选择成员")
     
     class Meta:
         app_label = 'funcs'
-        verbose_name = u'来电队列成员分机'
+        verbose_name = u'呼叫队列成员分机'
         verbose_name_plural = verbose_name
     
     def __unicode__(self):

@@ -17,6 +17,10 @@ class VoiceMail(models.Model):
     skipInstructions = models.BooleanField(u'Skip Voicemail Instructions')
     skipGreeting = models.BooleanField(u'Skip Voicemail Greeting')
     
+    #other
+    vm_notify_email = False
+    timezone = 'Asia/Hong_Kong'
+    
     class Meta:
         app_label = 'funcs'
         verbose_name = u'语音邮箱'

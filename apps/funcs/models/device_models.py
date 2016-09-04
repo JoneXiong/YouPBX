@@ -1,4 +1,7 @@
 # coding=utf-8
+'''
+Extension(电话分机)
+'''
 
 from django.db import models
 
@@ -6,14 +9,20 @@ from django.db import models
 class Device(models.Model):
     
     name = models.CharField(u'名称', max_length=64)
-    class_type = models.CharField(u'类型', max_length=20, choices=[('SipDevice',u'SIP device')], default='SipDevice')
+    class_type = models.CharField(u'类型', max_length=20, choices=[
+                                                                 ('SipDevice',u'SIP device'),
+                                                                 ('IAX2Device',u'IAX2 device'),
+                                                                 ('FXSDevice',u'FXS device'),
+                                                                 ], default='SipDevice')
     context = models.ForeignKey('base.Context', verbose_name="默认组", default=1)
-    location = models.ForeignKey('base.Location', verbose_name="所属域", default=1)
+    location = models.ForeignKey('base.Location', verbose_name="所属域", default=1, related_name="devices")
     
     callerid_internal_name = models.CharField(u'内部名称', max_length=64, blank=True, null=True)
     callerid_internal_number = models.CharField(u'内部号码', max_length=64, blank=True, null=True)
+    
     callerid_external_name = models.CharField(u'外部名称', max_length=64, blank=True, null=True)
     callerid_external_number = models.CharField(u'外部号码', max_length=64, blank=True, null=True)
+    
     media_mode = models.CharField(u'音频传输模式', max_length=10, choices=[('psp',u'服务器中转'),('p2p',u'点对点')], default='psp')
     
     sip_username = models.CharField(u'SIP用户名', max_length=64, blank=True, null=True)
@@ -28,6 +37,10 @@ class Device(models.Model):
     registry_ringtype = models.CharField(u'响铃模式', max_length=10, choices=[('ringing',u'Ringing'), ('moh',u'Hold Music')], default='ringing')
     registry_timeout = models.IntegerField(u'响铃时长(秒)', default=30)
     registry_ignoreFWD = models.BooleanField(u'禁用呼叫转发')
+    
+    # other
+    sip_force_contact = 'nat-connectile-dysfunction'
+    transfer_fallback_extension = 'operator'
     
     class Meta:
         app_label = 'funcs'

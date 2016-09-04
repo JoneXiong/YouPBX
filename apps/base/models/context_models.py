@@ -1,4 +1,7 @@
 # coding=utf-8
+'''
+用户组
+'''
 
 from django.db import models
 
@@ -12,7 +15,7 @@ class Context(models.Model):
     
     class Meta:
         app_label = 'base'
-        verbose_name = u'组 context'
+        verbose_name = u'分组'
         verbose_name_plural = verbose_name
     
     def __unicode__(self):

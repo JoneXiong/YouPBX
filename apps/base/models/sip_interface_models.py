@@ -3,7 +3,7 @@
 from django.db import models
 
 '''
-profiles
+Switch profile(SIP接口配置)
 '''
 
 class SipInterface(models.Model):
@@ -24,6 +24,35 @@ class SipInterface(models.Model):
     registry_detect_nat_on_registration = models.BooleanField(u'主动NAT探测')
     registry_force_rport = models.BooleanField(u'用网络IP端口作为RTP')
     
+    #other
+    manage_presence = True
+    presence_db_name = 'share_presence'
+    presence_hosts = 'sip.mydomain.com'
+    send_presence_on_register = True
+    delete_subs_on_register = True
+    caller_id_type = u'rpid'
+    auto_jitterbuffer_msec = 120
+    
+    nonce_ttl = '86400'
+    use_rtp_timer = True
+    rtp_timer_name = 'soft'
+    codec_prefs = '$${global_codec_prefs}'
+    inbound_codec_negotiation = 'generous'
+    rtp_timeout_sec = 300
+    rtp_hold_timeout_sec = 1800
+    rfc2833_pt = 101
+    dtmf_duration = 100
+    dtmf_type = u'rfc2833'
+    session_timeout = 1800
+    codec_ms = 20
+    accept_blind_reg = False
+    
+    minimum_session_expires = 120
+    vm_from_email = u'voicemail@freeswitch.org'
+    disable_register = False
+    log_auth_failures = True
+    auth_all_packets = False
+    
     class Meta:
         app_label = 'base'
         verbose_name = u'SIP接口设置'
@@ -39,3 +68,14 @@ class SipInterface(models.Model):
             ids = model.search(cr, uid, [], context=context)
             return ids[0] if ids else False
         return wrapper
+    
+    def get_ext_ip(self):
+        if self.ext_ip_address:
+            if self.nat_type:
+                return "autonat:" + self.ext_ip_address
+            else:
+                return self.ext_ip_address
+        elif str(self.nat_type) == str(1):
+            return 'auto-nat'
+        elif str(self.nat_type) == str(2):
+            return 'stun:stun.freeswitch.org'

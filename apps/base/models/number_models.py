@@ -90,3 +90,9 @@ class Number(models.Model):
         elif values_ids:
             # value is False, remove existing binding
             ir_values_obj.unlink(cursor, user, values_ids, context=ctx)
+
+    def get_vm_number(self):
+        pass
+    
+    def get_transfer_number(self):
+        pass

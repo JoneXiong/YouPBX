@@ -1,4 +1,7 @@
 # coding=utf-8
+'''
+AclBlacklist  netlist (访问控制列表)
+'''
 
 from django.db import models
 
@@ -15,6 +18,12 @@ class Netlist(models.Model):
     
     def __unicode__(self):
         return self.name
+    
+    def get_name(self):
+        if self.systemlist:
+            return self.systemlist
+        else:
+            return "net_list_%s"%self.id
 
 class NetlistItem(models.Model):
     

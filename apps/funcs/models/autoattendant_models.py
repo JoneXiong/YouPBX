@@ -1,4 +1,7 @@
 # coding=utf-8
+'''
+互动式语音应答
+'''
 
 from django.db import models
 
@@ -18,7 +21,7 @@ class Autoattendant(models.Model):
     
     class Meta:
         app_label = 'funcs'
-        verbose_name = u'自动语音应答'
+        verbose_name = u'IVR菜单'
         verbose_name_plural = verbose_name
     
     def __unicode__(self):
@@ -42,11 +45,15 @@ class AutoattendantKeymapping(models.Model):
     
     class Meta:
         app_label = 'funcs'
-        verbose_name = u'自动语音应答键映射'
+        verbose_name = u'IVR菜单应答键映射'
         verbose_name_plural = verbose_name
     
     def __unicode__(self):
         return self.digits
+    
+    def get_number(self):
+        from apps.base.models import Number
+        return Number.objects.get(id=1)
     
     def _action(self, cursor, user, ids, name, arg, context=None):
         res = {}

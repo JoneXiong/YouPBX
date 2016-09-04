@@ -1,4 +1,7 @@
 # coding=utf-8
+'''
+时间安排
+'''
 
 from django.db import models
 
@@ -19,3 +22,9 @@ class TimeRoutes(models.Model):
     
     def __unicode__(self):
         return self.name
+
+    def get_during_transger_number(self):
+        pass
+    
+    def get_outside_transger_number(self):
+        pass

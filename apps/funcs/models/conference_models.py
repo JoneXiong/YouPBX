@@ -15,7 +15,7 @@ class Conference(models.Model):
     
     class Meta:
         app_label = 'funcs'
-        verbose_name = u'语音会议室'
+        verbose_name = u'电话会议室'
         verbose_name_plural = verbose_name
     
     def __unicode__(self):
