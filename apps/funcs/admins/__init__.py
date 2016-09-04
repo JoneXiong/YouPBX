@@ -27,7 +27,7 @@ class RingGroupAdmin(ReXmlAdmin):
     inlines = [ RingGroupDeviceInline ]
     pass
 
-site.register(models.RingGroup)
+site.register(models.RingGroup, RingGroupAdmin)
 
 
 # site.register(models.Autoattendant)
