@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="1" model="base.context">
+        <field type="CharField" name="name">内部</field>
+        <field type="CharField" name="media_mode">psp</field>
+        <field type="CharField" name="end_type">tts</field>
+        <field to="base.mediafile" name="media_file" rel="ManyToOneRel"><None></None></field>
+        <field type="TextField" name="tts_string">您好，您拨的号码无效，请查证后再拨！</field>
+    </object>
+    <object pk="2" model="base.context">
+        <field type="CharField" name="name">外部</field>
+        <field type="CharField" name="media_mode">psp</field>
+        <field type="CharField" name="end_type">tts</field>
+        <field to="base.mediafile" name="media_file" rel="ManyToOneRel"><None></None></field>
+        <field type="TextField" name="tts_string">您好，您拨的号码无效，请查证后再拨！</field>
+    </object>
+    <object pk="1" model="base.location">
+        <field type="CharField" name="location_name">主区域</field>
+        <field type="CharField" name="domain_name">127.0.0.1</field>
+    </object>
+    <object pk="1" model="base.netlist">
+        <field type="CharField" name="name">Private/Local Network (auto)</field>
+        <field type="CharField" name="systemlist">rfc1918.auto</field>
+        <field type="CharField" name="default_type">deny</field>
+    </object>
+    <object pk="2" model="base.netlist">
+        <field type="CharField" name="name">Private Network (auto)</field>
+        <field type="CharField" name="systemlist">nat.auto</field>
+        <field type="CharField" name="default_type">deny</field>
+    </object>
+    <object pk="3" model="base.netlist">
+        <field type="CharField" name="name">Local Network (auto)</field>
+        <field type="CharField" name="systemlist">localnet.auto</field>
+        <field type="CharField" name="default_type">deny</field>
+    </object>
+    <object pk="4" model="base.netlist">
+        <field type="CharField" name="name">Loopback Network (auto)</field>
+        <field type="CharField" name="systemlist">loopback.auto</field>
+        <field type="CharField" name="default_type">deny</field>
+    </object>
+    <object pk="5" model="base.netlist">
+        <field type="CharField" name="name">Trunks (auto)</field>
+        <field type="CharField" name="systemlist">trunks.auto</field>
+        <field type="CharField" name="default_type">deny</field>
+    </object>
+    <object pk="6" model="base.netlist">
+        <field type="CharField" name="name">Public Internet</field>
+        <field type="CharField" name="systemlist"></field>
+        <field type="CharField" name="default_type">allow</field>
+    </object>
+    <object pk="1" model="base.numberpool">
+        <field type="CharField" name="name">分机</field>
+        <field type="CharField" name="alias">Device</field>
+        <field type="IntegerField" name="count"><None></None></field>
+        <field type="CharField" name="no">1</field>
+    </object>
+    <object pk="2" model="base.numberpool">
+        <field type="CharField" name="name">自动语音应答</field>
+        <field type="CharField" name="alias">Auto Attendant</field>
+        <field type="IntegerField" name="count"><None></None></field>
+        <field type="CharField" name="no">2</field>
+    </object>
+    <object pk="3" model="base.numberpool">
+        <field type="CharField" name="name">语音会议室</field>
+        <field type="CharField" name="alias">Conference</field>
+        <field type="IntegerField" name="count"><None></None></field>
+        <field type="CharField" name="no">3</field>
+    </object>
+    <object pk="4" model="base.numberpool">
+        <field type="CharField" name="name">来电队列</field>
+        <field type="CharField" name="alias">Ring Group</field>
+        <field type="IntegerField" name="count"><None></None></field>
+        <field type="CharField" name="no">4</field>
+    </object>
+    <object pk="5" model="base.numberpool">
+        <field type="CharField" name="name">语音信箱</field>
+        <field type="CharField" name="alias">Voicemail</field>
+        <field type="IntegerField" name="count"><None></None></field>
+        <field type="CharField" name="no">5</field>
+    </object>
+    <object pk="6" model="base.numberpool">
+        <field type="CharField" name="name">工作时段</field>
+        <field type="CharField" name="alias">timeroutes</field>
+        <field type="IntegerField" name="count"><None></None></field>
+        <field type="CharField" name="no">6</field>
+    </object>
+    <object pk="7" model="base.numberpool">
+        <field type="CharField" name="name">系统号码</field>
+        <field type="CharField" name="alias">System</field>
+        <field type="IntegerField" name="count"><None></None></field>
+        <field type="CharField" name="no">7</field>
+    </object>
+    <object pk="1" model="base.route">
+        <field type="CharField" name="name">10-digit US</field>
+        <field type="CharField" name="description"></field>
+        <field type="PositiveSmallIntegerField" name="ptype">1</field>
+    </object>
+    <object pk="2" model="base.route">
+        <field type="CharField" name="name">International (011+)</field>
+        <field type="CharField" name="description"></field>
+        <field type="PositiveSmallIntegerField" name="ptype">1</field>
+    </object>
+    <object pk="3" model="base.route">
+        <field type="CharField" name="name">Emergency Services (911)</field>
+        <field type="CharField" name="description"></field>
+        <field type="PositiveSmallIntegerField" name="ptype">1</field>
+    </object>
+    <object pk="4" model="base.route">
+        <field type="CharField" name="name">Information Services (411)</field>
+        <field type="CharField" name="description"></field>
+        <field type="PositiveSmallIntegerField" name="ptype">1</field>
+    </object>
+    <object pk="1" model="base.routepattern">
+        <field to="base.route" name="route" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="content">1?(NPA NXX XXXX)</field>
+    </object>
+    <object pk="2" model="base.routepattern">
+        <field to="base.route" name="route" rel="ManyToOneRel">2</field>
+        <field type="CharField" name="content">011(X.)</field>
+    </object>
+    <object pk="3" model="base.routepattern">
+        <field to="base.route" name="route" rel="ManyToOneRel">3</field>
+        <field type="CharField" name="content">(911)</field>
+    </object>
+    <object pk="4" model="base.routepattern">
+        <field to="base.route" name="route" rel="ManyToOneRel">4</field>
+        <field type="CharField" name="content">(411)</field>
+    </object>
+</django-objects>
