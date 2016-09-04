@@ -73,7 +73,7 @@
         <field type="CharField" name="no">4</field>
     </object>
     <object pk="5" model="base.numberpool">
-        <field type="CharField" name="name">语音信箱</field>
+        <field type="CharField" name="name">语音邮箱</field>
         <field type="CharField" name="alias">Voicemail</field>
         <field type="IntegerField" name="count"><None></None></field>
         <field type="CharField" name="no">5</field>
