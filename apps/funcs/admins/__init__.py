@@ -18,11 +18,23 @@ class AutoattendantAdmin(ReXmlAdmin):
 site.register(models.Autoattendant, AutoattendantAdmin)
 
 
+
+class RingGroupDeviceInline(object):
+    model = models.RingGroupDevice
+    extra = 0
+
+class RingGroupAdmin(ReXmlAdmin):
+    inlines = [ RingGroupDeviceInline ]
+    pass
+
+site.register(models.RingGroup)
+
+
 # site.register(models.Autoattendant)
 # site.register(models.AutoattendantKeymapping)
 site.register(models.Conference)
 site.register(models.Device)
-site.register(models.RingGroup)
-site.register(models.RingGroupDevice)
+# site.register(models.RingGroup)
+# site.register(models.RingGroupDevice)
 site.register(models.TimeRoutes)
 site.register(models.VoiceMail)

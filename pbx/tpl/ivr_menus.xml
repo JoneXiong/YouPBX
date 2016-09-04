@@ -3,8 +3,8 @@
 	{% for menu  in menus %}
 	<menu name="auto_attendant_{{ menu.id }}" 
 			{%  if menu.registry_type=='audio': %}
-			greet-long="{{ menu.registry_mediafile.path }}" 
-			greet-short="{{ menu.registry_mediafile.path }}" 
+			greet-long="{{ menu.registry_mediafile.path() }}" 
+			greet-short="{{ menu.registry_mediafile.path() }}" 
 			{% else %}
 			tts-engine="cepstral" 
 			tts-voice="Allison-8kHz"
