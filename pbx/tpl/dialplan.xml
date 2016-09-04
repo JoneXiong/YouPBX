@@ -20,7 +20,7 @@
         <action application="playback" data="shout://translate.google.cn/translate_tts?tl=zh&ie=UTF-8&q={{ context.tts_string }}"/>
 		{% endif %}
 		{% if context.endtype=='audio': %}
-        <action application="playback" data="{{ context.media_file.path }}"/>
+        <action application="playback" data="{{ context.media_file.path() }}"/>
 		{% endif %}
         <action application="sleep" data="1000"/>        
         <action application="hangup"/>
