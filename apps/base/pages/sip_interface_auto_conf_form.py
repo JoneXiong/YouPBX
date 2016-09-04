@@ -23,7 +23,9 @@ class SipInterfaceAutoConf(FormPage):
             
     @filter_hook
     def save_forms(self):
-        print self.form_obj.cleaned_data
-        pass
+        data = self.form_obj.cleaned_data
+        ips = data.get('ips', [])
+        for ip in ips:
+            init.create_sipinterface_with_ip(ip)
     
 site.register_page(SipInterfaceAutoConf)

@@ -15,26 +15,30 @@ def get_ip_list():
 
 def create_sipinterface_with_ip(ip):
     # Authenticated
-    obj = SipInterface()
-    obj.name = 'Authenticated SIP on %s'%ip
-    obj.ip_address = ip
-    obj.sip_port = 5060
-    obj.nat_net_listi_id = 2
-    obj.inbound_net_list_id = 5
-    obj.context = 2 # Publicly Accessible
-    obj.auth = True
-    # ...
-    obj.save()
+    ojbs = SipInterface.objects.filter(ip_address=ip,port=5060)
+    if not ojbs.exists():
+        obj = SipInterface()
+        obj.name = 'Authenticated SIP on %s'%ip
+        obj.ip_address = ip
+        obj.sip_port = 5060
+        obj.nat_net_listi_id = 2
+        obj.inbound_net_list_id = 5
+        obj.context = 2 # Publicly Accessible
+        obj.auth = True
+        # ...
+        obj.save()
     # Unauthenticated
-    obj = SipInterface()
-    obj.name = 'Unauthenticated SIP on %s'%ip
-    obj.ip_address = ip
-    obj.sip_port = 5080
-    obj.nat_net_list = 2
-    obj.context = 2 # Publicly Accessible
-    obj.auth = False
-    # ...
-    obj.save()
+    ojbs2 = SipInterface.objects.filter(ip_address=ip,port=5080)
+    if not ojbs2.exists():
+        obj = SipInterface()
+        obj.name = 'Unauthenticated SIP on %s'%ip
+        obj.ip_address = ip
+        obj.sip_port = 5080
+        obj.nat_net_list = 2
+        obj.context = 2 # Publicly Accessible
+        obj.auth = False
+        # ...
+        obj.save()
     
 def get_sipinterface_default_ip_list():
     ret = []
