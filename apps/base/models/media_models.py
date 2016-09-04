@@ -25,6 +25,9 @@ class MediaFile(models.Model):
     def __unicode__(self):
         return self.ture_path
     
+    def path(self):
+        return self.ture_path
+    
 
     def _get_path(self, cr, uid, ids, field_name, arg, context):
         result = {}
