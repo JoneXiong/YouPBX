@@ -12,6 +12,7 @@ class SipInterfaceAutoConf(FormPage):
     
     verbose_name = u'自动检测'
     app_label = 'base'
+    hidden_menu = True
     
     def prepare_form(self):
         res = init.get_sipinterface_default_ip_list()
@@ -23,3 +24,5 @@ class SipInterfaceAutoConf(FormPage):
     def save_forms(self):
         print self.form_obj.cleaned_data
         pass
+    
+site.register_page(SipInterfaceAutoConf)
