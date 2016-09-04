@@ -2,7 +2,7 @@
 import os
 import shutil
 
-from models import Fs_Sipinterface,Fs_Location
+from apps.base.models import SipInterface, Location
 import config 
 
 fs_conf_path = config.fs_conf_path
@@ -19,7 +19,7 @@ def create_default_Sipinterface():
     for ip in ip_list:
         if (not ip.startswith('127.0.0.1') ) and (not ip.startswith('169.254.') ):
             # Authenticated
-            obj = Fs_Sipinterface()
+            obj = SipInterface()
             obj.name = 'Authenticated SIP on %s'%ip
             obj.ip_address = ip
             obj.sip_port = '5060'
@@ -30,7 +30,7 @@ def create_default_Sipinterface():
             # ...
             obj.save()
             # Unauthenticated
-            obj = Fs_Sipinterface()
+            obj = SipInterface()
             obj.name = 'Unauthenticated SIP on %s'%ip
             obj.ip_address = ip
             obj.sip_port = '5080'
@@ -45,7 +45,7 @@ def create_default_location():
     import socket
     myname = socket.getfqdn(socket.gethostname())
     myaddr = socket.gethostbyname(myname)
-    obj = Fs_Location()
+    obj = Location()
     obj.location_name = u'主区域'
     obj.domain_name = myaddr
     obj.save()

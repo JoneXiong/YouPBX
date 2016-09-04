@@ -10,7 +10,7 @@
         <action application="set" bluebox="settingRingXfer" data="transfer_ringback=${us-ring}"/>
         <action application="export" bluebox="sipCalleeIdName" data="sip_callee_id_name={{ object.name }}"/>
         <action application="export" bluebox="sipCalleeIdNumber" data="sip_callee_id_number={{ object.number.number }}"/>
-        <action application="bridge" data="{% for member in object.members %} {ignore_early_media=true}user/{{ member.device.number.number }}@$${location_{{ object.number.location.id }}}{% if not loop.last%}{% if object.strategy=='4' %} :_: {% else %} | {% endif %}{% endif %}{% endfor %}"/>
+        <action application="bridge" data="{% for member in object.members.all() %} {ignore_early_media=true}user/{{ member.device.number.number }}@$${location_{{ object.number.location.id }}}{% if not loop.last%}{% if object.strategy=='4' %} :_: {% else %} | {% endif %}{% endif %}{% endfor %}"/>
 		{% if object.number.terminate_action == 'voicemail' %}
         <action application="answer"/>
         <action application="voicemail" data="default voicemail_{{ object.voicemail_id }} {{ object.number.get_vm_number() }}"/>

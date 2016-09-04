@@ -8,11 +8,11 @@
 		</domains>
 		<settings>
 			<param name="sip-ip" value='{{ sipprofile.ip_address or "$${local_ip_v4}" }}'/>
-			<param name="sip-port" value='{{ sipprofile.sip_port or "5060" }}'/>
+			<param name="sip-port" value='{{ sipprofile.port or "5060" }}'/>
 			<param name="ext-rtp-ip" value="{{ sipprofile.get_ext_ip() }}"/>
 			<param name="ext-sip-ip" value="{{ sipprofile.get_ext_ip() }}"/>
 			<param name="rtp-ip" value='{{ sipprofile.ip_address or "$${local_ip_v4}" }}'/>
-			<param name="auth-calls" value="{{ sipprofile.auth_calls|string|lower }}"/>
+			<param name="auth-calls" value="{{ sipprofile.auth|string|lower }}"/>
 			<param name="enable-timer" value="false"/>
 			<param name="user-agent-string" value="OE+ PBX"/>
 			<param name="context" value="context_{{ sipprofile.context.id }}"/>
@@ -51,7 +51,7 @@
 			<param name="codec-ms" value="{{ sipprofile.codec_ms }}"/>
 			<param name="accept-blind-reg" value="{{ str(sipprofile.accept_blind_reg).lower() }}"/>
 			<param name="enable-100rel" value="true"/>
-			<param name="multiple-registrations" value="{{ sipprofile.multiple_registrations }}"/>
+			<param name="multiple-registrations" value="{{ sipprofile.multiple }}"/>
 			<param name="minimum-session-expires" value="{{ sipprofile.minimum_session_expires }}"/>
 			<param name="mailer-app" value="/usr/local/freeswitch/script/emailvm.py"/>
 			<param name="mailer-app-args" value="-i -d -f {{ sipprofile.vm_from_email}.org.com -t"/>
@@ -62,21 +62,21 @@
 			<param name="mailer-app-args" value="-i -d -f voicemail@vwna.com -t"/>-->#}
 		</settings>
 		<gateways>
-			{% for gateway  in sipprofile.gateways %}
+			{% for gateway  in sipprofile.gateways.all() %}
 			<gateway name="trunk_{{ gateway.id }}">
 				{#<!--
 				<variables>
 				    <variable name="both_var_name" data="gw={{ gateway.name }}"/>
 				</variables>-->#}
-				<param name="username" value="{{ gateway.username }}"/>
-				<param name="password" value="{{ gateway.password }}"/>
+				<param name="username" value="{{ gateway.sip_username }}"/>
+				<param name="password" value="{{ gateway.sip_password }}"/>
 				<param name="register" value="{{ gateway.register|string|lower }}"/>
 				{% if gateway.realm: %}
-				<param name="realm" value="{{ gateway.realm }}"/>
+				<param name="realm" value="{{ gateway.server }}"/>
 				{% endif %}
 				{#<!--
 				<param py:if="gateway.from_user" name="from-user" value="{{ gateway.from_user }}"/>
-				<param py:if="gateway.from_domain" name="from-domain" value="{{ gateway.from_domain }}"/>
+				<param py:if="gateway.sip_from_domain" name="from-domain" value="{{ gateway.sip_from_domain }}"/>
 				<param py:if="gateway.extension" name="extension" value="{{ gateway.get_extension() }}"/>
 				<param py:if="gateway.proxy" name="proxy" value="{{ gateway.proxy }}"/>
 				<param py:if="gateway.register_proxy" name="register-proxy" value="{{ gateway.register_proxy }}"/>

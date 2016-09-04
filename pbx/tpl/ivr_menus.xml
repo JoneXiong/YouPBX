@@ -15,11 +15,11 @@
 			inter-digit-timeout={{ menu.digit_timeout }}* 1000
 			digit-len={{ extension_digits }}
 			max-failures="{{ menu.registry_max_failures }}" >
-		{% for keymapping  in keymapping_ids %}
+		{% for keymapping  in menu.keymappings.all() %}
 		{% if loop.first %}
-		<entry action="menu-exec-app" name="catch_all" digits="/^([0-9]{{ '{' ~ extension_digits ~ '}' }})$/" param="execute_extension $1 XML context_{{ keymapping.number.context_id }}" />
-		{% endfor %}
-		<entry action="menu-exec-app" digits="{{ keymapping.digits }}" param="transfer {{ keymapping.number.number }} XML context_{{ keymapping.number.context_id }}"/>
+		<entry action="menu-exec-app" name="catch_all" digits="/^([0-9]{{ '{' ~ extension_digits ~ '}' }})$/" param="execute_extension $1 XML context_{{ keymapping.get_number().context_id }}" />
+		{% endif %}
+		<entry action="menu-exec-app" digits="{{ keymapping.digits }}" param="transfer {{ keymapping.get_number().number }} XML context_{{ keymapping.get_number().context_id }}"/>
 		{% endfor %}
 	</menu>
 	{% endfor %}

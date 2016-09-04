@@ -4,7 +4,7 @@
     <network-lists>
 	{% for bl  in netlist %}
 		<list name="{{ bl.get_name() }}" default="{{ bl.default_type }}">
-			{% for iteam  in bl.items %}
+			{% for iteam  in bl.items.all() %}
 			<node bluebox="net_list_item_{{ iteam.id }}" type="{{ iteam.type }}" cidr="{{ iteam.record }}"/>
 			{% endfor %}
 		</list>

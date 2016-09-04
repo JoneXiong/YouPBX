@@ -6,32 +6,32 @@
     <groups>
       <group name="default">
         <users>
-          {% for endpoint  in location.devices %}
+          {% for endpoint  in location.devices.all() %}
           <user bluebox_id="{{ endpoint.id }}" id="{{ endpoint.number.number }}">
             <params>
 	            <param name='password' value='{{ endpoint.sip_password }}'/>
                 <param name="dial-string" value="{presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(${dialed_user}@${dialed_domain})}"/>
 				{#<!--
-	            <param name='vm-password' value='{{ endpoint.voicemai.vm_password }}'/>
-	            <param py:if="endpoint.voicemai" name="vm-mailto" value="{{ endpoint.voicemai.vm_email }}"/>
-	            <param py:if="endpoint.voicemai" name="vm-email-all-messages" value="{{ str(endpoint.voicemai.vm_attach_email).lower() }}"/>
-	            <param py:if="endpoint.voicemai" name="vm-attach-file" value="{{ str(endpoint.voicemai.vm_attach_file).lower() }}"/>
+	            <param name='vm-password' value='{{ endpoint.voicemai.password }}'/>
+	            <param py:if="endpoint.voicemai" name="vm-mailto" value="{{ endpoint.voicemai.registry_email_address }}"/>
+	            <param py:if="endpoint.voicemai" name="vm-email-all-messages" value="{{ str(endpoint.voicemai.registry_email_all_messages).lower() }}"/>
+	            <param py:if="endpoint.voicemai" name="vm-attach-file" value="{{ str(endpoint.voicemai.registry_attach_audio_file).lower() }}"/>
 	            <param py:if="endpoint.voicemai" name="vm-keep-local-after-email" value="{{ str(not endpoint.voicemai.registry_delete_file).lower() }}"/>
 	            <param py:if="endpoint.voicemai" name="vm-notify-email-all-messages"  value="{{ str(endpoint.voicemai.vm_notify_email).lower() }}"/>
 	            <param name="vm-message-ext" value="mp3"/>-->#}
             </params>
             <variables>
             	{% if endpoint.outbound_caller_id_name %}
-	            <variable name="outbound_caller_id_name" value="{{ endpoint.outbound_caller_id_name }}"/>
+	            <variable name="outbound_caller_id_name" value="{{ endpoint.callerid_external_name }}"/>
 				{% endif %}
 				{% if endpoint.outbound_caller_id_number %}
-	            <variable name="outbound_caller_id_number" value="{{ endpoint.outbound_caller_id_number }}"/>
+	            <variable name="outbound_caller_id_number" value="{{ endpoint.callerid_external_number }}"/>
 				{% endif %}
 				{% if endpoint.internal_caller_id_name %}
-	            <variable name="internal_caller_id_name" value="{{ endpoint.internal_caller_id_name }}"/>
+	            <variable name="internal_caller_id_name" value="{{ endpoint.callerid_internal_name }}"/>
 				{% endif %}
 				{% if endpoint.internal_caller_id_number %}
-	            <variable name="internal_caller_id_number" value="{{ endpoint.internal_caller_id_number }}"/>
+	            <variable name="internal_caller_id_number" value="{{ endpoint.callerid_internal_number }}"/>
 				{% endif %}
 	            <variable name="user_context" value="context_{{ endpoint.context.id }}"/>
 	            <variable name="force_transfer_context" value="context_{{ endpoint.context.id }}"/>
@@ -62,15 +62,15 @@
         <users>
           <user bluebox_id="{{ vm.id }}" id="{{ vm.number.number }}">
             <params>
-	            <param name='vm-password' value='{{ vm.vm_password }}'/>
+	            <param name='vm-password' value='{{ vm.password }}'/>
                 <param name="sip-forbid-register" value="true"/>
 			    <param name="vm-message-ext" value="mp3"/>
-	            <param name="vm-email-all-messages" value="{{ vm.vm_attach_email|string|lower }}"/>
-				{% if vm.vm_attach_email %}
-	            <param name="vm-mailto" value="{{ vm.vm_email }}"/>
-				<param name="email-addr" value="{{ vm.vm_email }}"/>
-	            <param name="vm-attach-file" value="{{ vm.vm_attach_file|string|lower }}"/>
-				<param name="vm-delete-file" value="{{ vm.vm_delete_file|string|lower }}"/>
+	            <param name="vm-email-all-messages" value="{{ vm.registry_email_all_messages|string|lower }}"/>
+				{% if vm.registry_email_all_messages %}
+	            <param name="vm-mailto" value="{{ vm.registry_email_address }}"/>
+				<param name="email-addr" value="{{ vm.registry_email_address }}"/>
+	            <param name="vm-attach-file" value="{{ vm.registry_attach_audio_file|string|lower }}"/>
+				<param name="vm-delete-file" value="{{ vm.registry_delete_file|string|lower }}"/>
 				{% endif %}
 
 				{#<!--
