@@ -13,6 +13,37 @@ def get_ip_list():
     ips = ips.split('\n')
     return [e.replace('addr:', '') for e in ips if e]
 
+def create_sipinterface_with_ip(ip):
+    # Authenticated
+    obj = SipInterface()
+    obj.name = 'Authenticated SIP on %s'%ip
+    obj.ip_address = ip
+    obj.sip_port = 5060
+    obj.nat_net_listi_id = 2
+    obj.inbound_net_list_id = 5
+    obj.context = 2 # Publicly Accessible
+    obj.auth = True
+    # ...
+    obj.save()
+    # Unauthenticated
+    obj = SipInterface()
+    obj.name = 'Unauthenticated SIP on %s'%ip
+    obj.ip_address = ip
+    obj.sip_port = 5080
+    obj.nat_net_list = 2
+    obj.context = 2 # Publicly Accessible
+    obj.auth = False
+    # ...
+    obj.save()
+    
+def get_sipinterface_default_ip_list():
+    ret = []
+    ip_list = get_ip_list()
+    for ip in ip_list:
+        if (not ip.startswith('127.0.0.1') ) and (not ip.startswith('169.254.') ):
+            ret.append(ip)
+    return ret
+
 def create_default_Sipinterface():
     # generate default sip_profiles
     ip_list = get_ip_list()

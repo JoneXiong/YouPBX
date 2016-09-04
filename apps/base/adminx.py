@@ -7,3 +7,4 @@ site.site_footer  = 'Oejia CopyRight'
 site.menu_style = 'default'
 
 import admins
+import pages
