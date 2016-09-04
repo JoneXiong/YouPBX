@@ -17,7 +17,14 @@ class NumberAdmin(ReXmlAdmin):
 site.register(models.Number, NumberAdmin)
 site.register(models.NumberPool)
 
-site.register(models.SipInterface)
+class SipInterfaceAdmin(ReXmlAdmin):
+    
+    def get_nav_btns(self):
+        return [
+            '''<a href="/xadmin/page/sipinterfacemodels/" class="btn btn-primary"><i class="fa fa-inbox"></i> 自动检测</a> '''
+        ]
+
+site.register(models.SipInterface, SipInterfaceAdmin)
 
 
 import route_admin

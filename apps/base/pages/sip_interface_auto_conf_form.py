@@ -11,6 +11,7 @@ from pbx import init
 class SipInterfaceAutoConf(FormPage):
     
     verbose_name = u'自动检测'
+    app_label = 'base'
     
     def prepare_form(self):
         res = init.get_sipinterface_default_ip_list()
