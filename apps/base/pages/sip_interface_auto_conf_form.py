@@ -19,6 +19,7 @@ class SipInterfaceAutoConf(FormPage):
         _choices= [(e,e) for e in res]
         class MyForm(forms.Form):
             ips = forms.MultipleChoiceField(label='选择IP', choices=_choices)
+        self.view_form = MyForm
             
     @filter_hook
     def save_forms(self):
