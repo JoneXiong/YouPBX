@@ -16,6 +16,7 @@ class FsConf(ConfigFormPage):
     verbose_name = u'FS系统配置'
     app_label = 'base'
     #hidden_menu = True
+    key = 'FsConf'
     
     def prepare_form(self):
         class MyForm(forms.Form):
