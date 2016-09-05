@@ -1,7 +1,7 @@
 # coding=utf-8
 from pbx import gen_xml
 from pbx.rpc import in_api
-from base.pages import FsConfInit
+from base.pages import FsConf
 
 class ReXmlAdmin(object):
     
@@ -30,7 +30,7 @@ class ReXmlAdmin(object):
             return res['msg']
         
     def _rexml(self):
-        fs_conf_path = FsConfInit.options('fs_conf_path')
+        fs_conf_path = FsConf.options('fs_conf_path')
         if fs_conf_path:
             gen_xml.gen_all(fs_conf_path)
             return in_api.reload_xml()

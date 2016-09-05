@@ -11,7 +11,7 @@ from apps.base import models
 from pbx import init
 
 
-class FsConfInit(ConfigFormPage):
+class FsConf(ConfigFormPage):
     
     verbose_name = u'FS系统配置'
     app_label = 'base'
@@ -26,7 +26,8 @@ class FsConfInit(ConfigFormPage):
             
     @filter_hook
     def save_forms(self):
-        super(FsConfInit,self).save_forms()
-        init.xml_init(self.options('fs_conf_path'))
+        super(FsConf,self).save_forms()
+        if '_init' in self.request.GET:
+            init.xml_init(self.options('fs_conf_path'))
     
-site.register_page(FsConfInit)
+site.register_page(FsConf)
