@@ -70,8 +70,8 @@
 				</variables>-->#}
 				<param name="username" value="{{ gateway.sip_username }}"/>
 				<param name="password" value="{{ gateway.sip_password }}"/>
-				<param name="register" value="{{ gateway.register|string|lower }}"/>
-				{% if gateway.realm: %}
+				<param name="register" value="{{ gateway.get_register()|string|lower }}"/>
+				{% if gateway.server: %}
 				<param name="realm" value="{{ gateway.server }}"/>
 				{% endif %}
 				{#<!--
