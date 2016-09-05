@@ -5,83 +5,82 @@ from mole.template import jinja2_template
 
 from apps.base import models as base_models
 from apps.funcs import models as funcs_models
-import config
-import mole
+
+
+fs_conf_path = None
+odbc_credentials = '' #config.odbc_credentials
 
 cur = os.path.realpath(os.path.dirname(__file__))
 tpl_path = os.path.join(cur, 'tpl')
-out_path = config.fs_conf_path
 
-odbc_credentials = config.odbc_credentials
-
-def sip_profiles():
+def sip_profiles(fs_conf_path):
     u'''
     sip_profiles
     '''
     profiles = base_models.SipInterface.objects.all()
     m_data = jinja2_template('sip_profiles.xml',template_lookup=[tpl_path], profiles=profiles, odbc_credentials=odbc_credentials ) 
-    m_file = os.path.join(out_path,'sip_profiles', 'oe_profiles.xml')
+    m_file = os.path.join(fs_conf_path,'sip_profiles', 'oe_profiles.xml')
     f = open(m_file,'w+')
     f.write(m_data)
     f.close()
     
-def autoload_acl():
+def autoload_acl(fs_conf_path):
     u'''
     autoload_acl
     '''
     netlist = base_models.Netlist.objects.all()
     m_data = jinja2_template('autoload_configs_acl.xml',template_lookup=[tpl_path], netlist=netlist) 
-    m_file = os.path.join(out_path,'autoload_configs', 'oe_acl.xml')
+    m_file = os.path.join(fs_conf_path,'autoload_configs', 'oe_acl.xml')
     f = open(m_file,'w+')
     f.write(m_data)
     f.close()
     
-def autoload_locations():
+def autoload_locations(fs_conf_path):
     u'''
     autoload_locations
     '''
     locations = base_models.Location.objects.all()
     m_data = jinja2_template('autoload_configs_locations.xml',template_lookup=[tpl_path], locations=locations) 
-    m_file = os.path.join(out_path,'autoload_configs', 'oe_locations.xml')
+    m_file = os.path.join(fs_conf_path,'autoload_configs', 'oe_locations.xml')
     f = open(m_file,'w+')
     f.write(m_data)
     f.close()
     
-def autoload_conferences():
+def autoload_conferences(fs_conf_path):
     u'''
     autoload_locations
     '''
     conferences = funcs_models.Conference.objects.all()
     m_data = jinja2_template('autoload_configs_conference.xml',template_lookup=[tpl_path], conferences=conferences) 
-    m_file = os.path.join(out_path,'autoload_configs', 'oe_conferences.xml')
+    m_file = os.path.join(fs_conf_path,'autoload_configs', 'oe_conferences.xml')
     f = open(m_file,'w+')
     f.write(m_data)
     f.close()
     
-def ivr_menus():
+def ivr_menus(fs_conf_path):
     u'''
     ivr_menus
     '''
     menus = funcs_models.Autoattendant.objects.all()
     m_data = jinja2_template('ivr_menus.xml',template_lookup=[tpl_path], menus=menus) 
-    m_file = os.path.join(out_path,'ivr_menus', 'oe_ivr.xml')
+    m_file = os.path.join(fs_conf_path,'ivr_menus', 'oe_ivr.xml')
     f = open(m_file,'w+')
     f.write(m_data)
     f.close()
     
-def directory():
+def directory(fs_conf_path):
     u'''
     directory
     '''
     locations = base_models.Location.objects.all()
     voicemails = funcs_models.VoiceMail.objects.all()
     m_data = jinja2_template('directory.xml',template_lookup=[tpl_path], locations=locations, voicemails=voicemails ) 
-    m_file = os.path.join(out_path,'directory', 'oe_directory.xml')
+    m_file = os.path.join(fs_conf_path,'directory', 'oe_directory.xml')
     f = open(m_file,'w+')
     f.write(m_data)
     f.close()
     
-def dialplan():
+def dialplan(fs_conf_path):
     u'''
     dialplan
     '''
@@ -140,19 +139,22 @@ def dialplan():
         context = contexts[context_id]
         context["id"] = context_id
         m_data = jinja2_template('dialplan.xml',template_lookup=[tpl_path], context=context) 
-        m_file = os.path.join(out_path,'dialplan', 'oe_context_%s.xml'%context_id)
+        m_file = os.path.join(fs_conf_path,'dialplan', 'oe_context_%s.xml'%context_id)
         f = open(m_file,'w+')
         f.write(m_data)
         f.close()
         
+def gen_all(fs_conf_path):
+    sip_profiles(fs_conf_path)
+    autoload_acl(fs_conf_path)
+    autoload_locations(fs_conf_path)
+    autoload_conferences(fs_conf_path)
+    ivr_menus(fs_conf_path)
+    directory(fs_conf_path)
+    dialplan(fs_conf_path)
+        
 def main():
-    sip_profiles()
-    autoload_acl()
-    autoload_locations()
-    autoload_conferences()
-    ivr_menus()
-    directory()
-    dialplan()
+    gen_all(fs_conf_path)
 
 if __name__=="__main__":
     main()

@@ -3,10 +3,8 @@ import os
 import shutil
 
 from apps.base.models import SipInterface, Location
-import config 
 
-fs_conf_path = config.fs_conf_path
-
+fs_conf_path = None
 
 def get_ip_list():
     ips = os.popen("/sbin/ifconfig | grep 'inet addr' | awk '{print $2}'").read()
@@ -85,7 +83,7 @@ def create_default_location():
     obj.domain_name = myaddr
     obj.save()
 
-def xml_init():
+def xml_init(fs_conf_path):
     u'''
     delete sip_profiles root file; delete directory default.xml; 
     delete autoload_configs conference.conf.xml and acl.conf.xml
@@ -120,7 +118,7 @@ def xml_init():
     shutil.move(m_path_acl, bak_path)
     
 def main():
-    xml_init()
+    xml_init(fs_conf_path)
     
 if __name__=="__main__":
     main()
