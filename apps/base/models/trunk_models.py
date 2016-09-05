@@ -57,7 +57,7 @@ class Trunk(models.Model):
         else:
             return None
     def get_register(self):
-        if self.username:
+        if self.sip_username:
             return True
         else:
             return False
