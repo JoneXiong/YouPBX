@@ -21,9 +21,8 @@ def create_sipinterface_with_ip(ip):
         obj.sip_port = 5060
         obj.nat_net_list_id = 2
         obj.inbound_net_list_id = 5
-        obj.context_id = 2 # Publicly Accessible
+        obj.context_id = 1
         obj.auth = True
-        # ...
         obj.save()
     # Unauthenticated
     ojbs2 = SipInterface.objects.filter(ip_address=ip,port=5080)
@@ -33,9 +32,8 @@ def create_sipinterface_with_ip(ip):
         obj.ip_address = ip
         obj.sip_port = 5080
         obj.nat_net_list_id = 2
-        obj.context_id = 2 # Publicly Accessible
+        obj.context_id = 1
         obj.auth = False
-        # ...
         obj.save()
     
 def get_sipinterface_default_ip_list():

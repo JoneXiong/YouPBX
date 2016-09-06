@@ -25,7 +25,10 @@ class SipInterfaceAutoConf(FormPage):
     def save_forms(self):
         data = self.form_obj.cleaned_data
         ips = data.get('ips', [])
-        for ip in ips:
-            init.create_sipinterface_with_ip(ip)
+        if ips:
+            for ip in ips:
+                init.create_sipinterface_with_ip(ip)
+        else:
+            init.create_sipinterface_with_ip('')
     
 site.register_page(SipInterfaceAutoConf)

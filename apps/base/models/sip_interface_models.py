@@ -9,7 +9,7 @@ Switch profile(SIP接口配置)
 class SipInterface(models.Model):
     
     name = models.CharField(u'名称', max_length=64, blank=True,null=True)
-    ip_address = models.CharField(u'绑定IP', max_length=64, blank=True,null=True)
+    ip_address = models.CharField(u'绑定IP', max_length=64, blank=True,null=True, help_text='留空表示让FS自动检测')
     port = models.IntegerField(u'端口', default=5060)
     ext_ip_address = models.CharField(u'外网IP', max_length=64, blank=True,null=True)
     auth = models.BooleanField(u'需要验证', default=True)
