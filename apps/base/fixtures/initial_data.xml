@@ -48,6 +48,11 @@
         <field type="CharField" name="systemlist"></field>
         <field type="CharField" name="default_type">allow</field>
     </object>
+    <object pk="1" model="base.netlistitem">
+        <field to="base.netlist" name="netlist" rel="ManyToOneRel">6</field>
+        <field type="CharField" name="record">0.0.0.0/0</field>
+        <field type="CharField" name="type">allow</field>
+    </object>
     <object pk="1" model="base.numberpool">
         <field type="CharField" name="name">分机</field>
         <field type="CharField" name="alias">Device</field>

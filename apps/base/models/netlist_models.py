@@ -28,8 +28,8 @@ class Netlist(models.Model):
 class NetlistItem(models.Model):
     
     netlist = models.ForeignKey(Netlist, verbose_name=u'所属控制列', related_name='items')
-    models.CharField(u'默认类型', max_length=10, choices=[('allow',u'允许'),('deny',u'拒绝')], default='deny')
-    record =  models.CharField(u'名称', max_length=64, blank=True, null=True)
+    type = models.CharField(u'是否允许', max_length=10, choices=[('allow',u'允许'),('deny',u'拒绝')], default='deny')
+    record =  models.CharField(u'对象', max_length=64, blank=True, null=True)
     
     class Meta:
         app_label = 'base'
