@@ -6,35 +6,8 @@ from apps.funcs import models
 from apps.common import ReXmlAdmin
 
 
-class AutoattendantKeymappingInline(object):
-    model = models.AutoattendantKeymapping
-    extra = 0
+site.register(models.Conference, ReXmlAdmin)
+site.register(models.Device, ReXmlAdmin)
 
-
-class AutoattendantAdmin(ReXmlAdmin):
-    inlines = [ AutoattendantKeymappingInline ]
-    pass
-
-site.register(models.Autoattendant, AutoattendantAdmin)
-
-
-
-class RingGroupDeviceInline(object):
-    model = models.RingGroupDevice
-    extra = 0
-
-class RingGroupAdmin(ReXmlAdmin):
-    inlines = [ RingGroupDeviceInline ]
-    pass
-
-site.register(models.RingGroup, RingGroupAdmin)
-
-
-# site.register(models.Autoattendant)
-# site.register(models.AutoattendantKeymapping)
-site.register(models.Conference)
-site.register(models.Device)
-# site.register(models.RingGroup)
-# site.register(models.RingGroupDevice)
-site.register(models.TimeRoutes)
-site.register(models.VoiceMail)
+site.register(models.TimeRoutes, ReXmlAdmin)
+site.register(models.VoiceMail, ReXmlAdmin)

@@ -15,4 +15,3 @@ class TrunkAdmin(ReXmlAdmin):
     pass
 
 site.register(models.Trunk, TrunkAdmin)
-# site.register(models.TrunkRoutePattern)
