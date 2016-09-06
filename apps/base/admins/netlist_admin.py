@@ -1,4 +1,9 @@
 # coding=utf-8
+'''
+Access Control List
+acl.conf
+https://freeswitch.org/confluence/display/FREESWITCH/ACL
+'''
 
 from xadmin import site
 
@@ -12,7 +17,9 @@ class NetlistItemInline(object):
 
 
 class NetlistAdmin(ReXmlAdmin):
+    
     inlines = [ NetlistItemInline ]
-    pass
+    menu_group = 'network_group'
+    order = 3
 
 site.register(models.Netlist, NetlistAdmin)

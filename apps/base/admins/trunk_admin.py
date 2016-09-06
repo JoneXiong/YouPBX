@@ -11,7 +11,9 @@ class TrunkRoutePatternInline(object):
 
 
 class TrunkAdmin(ReXmlAdmin):
+    
     inlines = [ TrunkRoutePatternInline ]
-    pass
+    menu_group = 'trunk_group'
+    order = 2
 
 site.register(models.Trunk, TrunkAdmin)

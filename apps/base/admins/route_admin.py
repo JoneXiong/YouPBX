@@ -10,7 +10,9 @@ class RoutePatternInline(object):
     extra = 0
 
 class RouteAdmin(ReXmlAdmin):
+    
     inlines = [ RoutePatternInline ]
-    pass
+    menu_group = 'trunk_group'
+    order = 1
 
 site.register(models.Route, RouteAdmin)
