@@ -112,7 +112,7 @@
     </object>
     <object pk="1" model="base.routepattern">
         <field to="base.route" name="route" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="content">1?(NPA NXX XXXX)</field>
+        <field type="CharField" name="content">^5(1[358][0-9]{9})$</field>
     </object>
     <object pk="2" model="base.routepattern">
         <field to="base.route" name="route" rel="ManyToOneRel">2</field>
