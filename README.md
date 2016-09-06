@@ -7,9 +7,9 @@ YouPBX 是一个强大 FreeSwift (电话软交换系统) 的管理GUI系统，�
 
 # 使用
 
-1. git clone
-2. cd YouPBX 
-3. python manage.py syncdb
-4. python manage.py runserver
+  1. git clone
+  2. cd YouPBX 
+  3. python manage.py syncdb
+  4. python manage.py runserver
 
 # 预览
