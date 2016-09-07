@@ -42,11 +42,11 @@ def api(cmd, bg=False, ok_check=True):
 def reload_xml():
     return api('reloadxml')
 
-def status(ok_check=False):
-    return api('status')
+def status():
+    return api('status', ok_check=False)
         
-def sofia_status(ok_check=False):
-    return api('sofia status')
+def sofia_status():
+    return api('sofia status', ok_check=False)
 
 def reload_acl():
     return api('reloadacl')
