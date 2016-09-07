@@ -17,7 +17,12 @@ class NumberPool(ReXmlAdmin):
     order = 2
     
     data_charts = {
-        "number_count": {'title': u"应用", "x-field": "name", "y-field": ("count",), "order": ('id',)},
+        "number_count": {'title': u"应用", "x-field": "name", "y-field": ("count",), "order": ('id',),
+                                  "option": {
+                                             "series": {"bars": {"align": "center", "barWidth": 0.6,'show':True}},
+                                             "xaxis": {"aggregate": "sum", "mode": "categories"},
+                                             },
+                         },
     }
 
 site.register(models.Number, NumberAdmin)
