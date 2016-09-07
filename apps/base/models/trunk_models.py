@@ -67,7 +67,7 @@ class TrunkRoutePattern(models.Model):
     
     trunk = models.ForeignKey(Trunk, verbose_name="所属中继", related_name='routepatterns')
     route = models.ForeignKey('base.Route', verbose_name="路由规则")
-    prepend = models.CharField('Prepend calls with', max_length=64)
+    prepend = models.CharField('Prepend calls with', max_length=64, blank=True,null=True)
     
     class Meta:
         app_label = 'base'
