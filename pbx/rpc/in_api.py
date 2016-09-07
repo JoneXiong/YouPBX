@@ -9,7 +9,7 @@ from config import event_socket_conf as conf
 log = StdoutLogger()
 inbound_event_listener = None
 
-def api(cmd, bg=False):
+def api(cmd, bg=False, ok_check=True):
     global inbound_event_listener
     data = {}
     if not inbound_event_listener:
@@ -27,7 +27,8 @@ def api(cmd, bg=False):
         bg_api_response = inbound_event_listener.api(fs_bg_api_string)
     log.info(str(bg_api_response))
     log.info(bg_api_response.get_response())
-    if not bg_api_response.is_success():
+    data['body'] = bg_api_response.get_response()
+    if ok_check and not bg_api_response.is_success():
         return {'code': -1, 'msg': 'bgapi failed !', 'data': data}
     if bg:
         job_uuid = bg_api_response.get_job_uuid()
@@ -40,9 +41,12 @@ def api(cmd, bg=False):
 
 def reload_xml():
     return api('reloadxml')
+
+def status():
+    return api('status', ok_check=False)
         
 def sofia_status():
-    return api('sofia status')
+    return api('sofia status', ok_check=False)
 
 def reload_acl():
     return api('reloadacl')
