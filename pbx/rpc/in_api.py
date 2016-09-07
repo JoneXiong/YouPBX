@@ -27,6 +27,7 @@ def api(cmd, bg=False):
         bg_api_response = inbound_event_listener.api(fs_bg_api_string)
     log.info(str(bg_api_response))
     log.info(bg_api_response.get_response())
+    data['body'] = bg_api_response.get_response()
     if not bg_api_response.is_success():
         return {'code': -1, 'msg': 'bgapi failed !', 'data': data}
     if bg:
@@ -40,6 +41,9 @@ def api(cmd, bg=False):
 
 def reload_xml():
     return api('reloadxml')
+
+def status():
+    return api('status')
         
 def sofia_status():
     return api('sofia status')
