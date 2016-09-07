@@ -14,6 +14,8 @@ YouPBX 是一个强大 FreeSwift (电话软交换系统) 的管理GUI系统，�
 ```
 
 # 预览
+![info](https://github.com/JoneXiong/YouPBX/raw/master/apps/base/static/base/images/youpbx0.jpg)
+
 ![info](https://github.com/JoneXiong/YouPBX/raw/master/apps/base/static/base/images/youpbx1.jpg)
 
 ![info](https://github.com/JoneXiong/YouPBX/raw/master/apps/base/static/base/images/youpbx2.jpg)
