@@ -18,7 +18,7 @@ class PbxStatusWidget(HtmlWidget):
         from pbx.rpc import in_api
         res = in_api.status()
         if res['code']==0:
-            context['content'] = '%s'%res['data']['body']
+            context['content'] = '%s'%res['data']['body'].replace('\n','<br/>')
         else:
             context['content'] = '获取失败'
             
@@ -34,7 +34,7 @@ class SofiaStatusWidget(HtmlWidget):
         from pbx.rpc import in_api
         res = in_api.sofia_status()
         if res['code']==0:
-            context['content'] = '%s'%res['data']['body']
+            context['content'] = '%s'%res['data']['body'].replace('\n','<br/>')
         else:
             context['content'] = '获取失败'
 
@@ -44,9 +44,9 @@ class MainDashboard(object):
     widgets = [
         [
             {"type": "html_pbx_status", "title": "服务状态"},
-            {"type": "html_sofia_status", "title": "VoIP状态"},
         ],
         [
+            {"type": "html_sofia_status", "title": "VoIP状态"},
         ]
     ]
 site.register(IndexView, MainDashboard)
