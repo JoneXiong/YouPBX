@@ -4,6 +4,8 @@ from xadmin.utils import fa_icon
 from xadmin.views.dashwidget import HtmlWidget, widget_manager
 from xadmin import site
 from xadmin.views.website import IndexView
+from apps.base import models
+from pages.fs_conf_form import FsConf
 
 
 @widget_manager.register
@@ -44,8 +46,10 @@ class MainDashboard(object):
     widgets = [
         [
             {"type": "html_pbx_status", "title": "服务状态"},
+            {"type": "chart", "model": "base.numberpool", 'chart': 'number_count'},
         ],
         [
+            {"type": "qbutton", "title": "快速上手", "btns": [{'title': "FS系统配置",'icon': fa_icon('cog'), 'url': "/xadmin/page/fsconf/"}, {'model': models.SipInterface}, {'model': models.Location}, {'title': "官方主页",'icon': fa_icon('github'), 'url': "https://github.com/JoneXiong/YouPBX"}]},
             {"type": "html_sofia_status", "title": "VoIP状态"},
         ]
     ]
