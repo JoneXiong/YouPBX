@@ -16,7 +16,6 @@ env = Environment(loader=FileSystemLoader(tpl_path))
 
 def jinja2_template(tpl, **args):
     template = env.get_template(tpl)
-    args.pop('template_lookup')
     return template.render(**args)
 
 def sip_profiles(fs_conf_path):
@@ -24,7 +23,7 @@ def sip_profiles(fs_conf_path):
     sip_profiles
     '''
     profiles = base_models.SipInterface.objects.all()
-    m_data = jinja2_template('sip_profiles.xml',template_lookup=[tpl_path], profiles=profiles, odbc_credentials=odbc_credentials ) 
+    m_data = jinja2_template('sip_profiles.xml', profiles=profiles, odbc_credentials=odbc_credentials ) 
     m_file = os.path.join(fs_conf_path,'sip_profiles', 'oe_profiles.xml')
     f = open(m_file,'w+')
     f.write(m_data)
@@ -35,7 +34,7 @@ def autoload_acl(fs_conf_path):
     autoload_acl
     '''
     netlist = base_models.Netlist.objects.all()
-    m_data = jinja2_template('autoload_configs_acl.xml',template_lookup=[tpl_path], netlist=netlist) 
+    m_data = jinja2_template('autoload_configs_acl.xml', netlist=netlist) 
     m_file = os.path.join(fs_conf_path,'autoload_configs', 'oe_acl.xml')
     f = open(m_file,'w+')
     f.write(m_data)
@@ -46,7 +45,7 @@ def autoload_locations(fs_conf_path):
     autoload_locations
     '''
     locations = base_models.Location.objects.all()
-    m_data = jinja2_template('autoload_configs_locations.xml',template_lookup=[tpl_path], locations=locations) 
+    m_data = jinja2_template('autoload_configs_locations.xml', locations=locations) 
     m_file = os.path.join(fs_conf_path,'autoload_configs', 'oe_locations.xml')
     f = open(m_file,'w+')
     f.write(m_data)
@@ -57,7 +56,7 @@ def autoload_conferences(fs_conf_path):
     autoload_locations
     '''
     conferences = funcs_models.Conference.objects.all()
-    m_data = jinja2_template('autoload_configs_conference.xml',template_lookup=[tpl_path], conferences=conferences) 
+    m_data = jinja2_template('autoload_configs_conference.xml', conferences=conferences) 
     m_file = os.path.join(fs_conf_path,'autoload_configs', 'oe_conferences.xml')
     f = open(m_file,'w+')
     f.write(m_data)
@@ -68,7 +67,7 @@ def ivr_menus(fs_conf_path):
     ivr_menus
     '''
     menus = funcs_models.Autoattendant.objects.all()
-    m_data = jinja2_template('ivr_menus.xml',template_lookup=[tpl_path], menus=menus) 
+    m_data = jinja2_template('ivr_menus.xml', menus=menus) 
     m_file = os.path.join(fs_conf_path,'ivr_menus', 'oe_ivr.xml')
     f = open(m_file,'w+')
     f.write(m_data)
@@ -80,7 +79,7 @@ def directory(fs_conf_path):
     '''
     locations = base_models.Location.objects.all()
     voicemails = funcs_models.VoiceMail.objects.all()
-    m_data = jinja2_template('directory.xml',template_lookup=[tpl_path], locations=locations, voicemails=voicemails ) 
+    m_data = jinja2_template('directory.xml', locations=locations, voicemails=voicemails ) 
     m_file = os.path.join(fs_conf_path,'directory', 'oe_directory.xml')
     f = open(m_file,'w+')
     f.write(m_data)
@@ -144,7 +143,7 @@ def dialplan(fs_conf_path):
     for context_id in contexts.keys():
         context = contexts[context_id]
         context["id"] = context_id
-        m_data = jinja2_template('dialplan.xml',template_lookup=[tpl_path], context=context) 
+        m_data = jinja2_template('dialplan.xml', context=context) 
         m_file = os.path.join(fs_conf_path,'dialplan', 'oe_context_%s.xml'%context_id)
         f = open(m_file,'w+')
         f.write(m_data)
