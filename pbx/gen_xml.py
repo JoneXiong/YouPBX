@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from mole.template import jinja2_template
+from jinja2 import Environment, FileSystemLoader
 
 from apps.base import models as base_models
 from apps.funcs import models as funcs_models
@@ -12,6 +12,12 @@ odbc_credentials = '' #config.odbc_credentials
 
 cur = os.path.realpath(os.path.dirname(__file__))
 tpl_path = os.path.join(cur, 'tpl')
+env = Environment(loader=FileSystemLoader(tpl_path))
+
+def jinja2_template(tpl, *args):
+    template = env.get_template(tpl)
+    args.pop('template_lookup')
+    return template.render(*args)
 
 def sip_profiles(fs_conf_path):
     u'''
