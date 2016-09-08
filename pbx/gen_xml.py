@@ -14,10 +14,10 @@ cur = os.path.realpath(os.path.dirname(__file__))
 tpl_path = os.path.join(cur, 'tpl')
 env = Environment(loader=FileSystemLoader(tpl_path))
 
-def jinja2_template(tpl, *args):
+def jinja2_template(tpl, **args):
     template = env.get_template(tpl)
     args.pop('template_lookup')
-    return template.render(*args)
+    return template.render(**args)
 
 def sip_profiles(fs_conf_path):
     u'''
