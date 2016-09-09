@@ -11,6 +11,7 @@ YouPBX 是一个强大 FreeSwift (电话软交换系统) 的管理GUI系统，�
 2. cd YouPBX 
 3. python manage.py syncdb
 4. python manage.py runserver
+5. 浏览 http://localhost/xadmin/  账号 admin admin
 ```
 
 # 预览
