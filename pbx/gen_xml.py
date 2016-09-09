@@ -92,7 +92,7 @@ def dialplan(fs_conf_path):
     contexts = {}
     trunkroutes = base_models.TrunkRoutePattern.objects.all()
     for vm in trunkroutes:
-        ct = vm.trunk.sip_interface.context.id
+        ct = vm.trunk.context.id
         if not contexts.has_key(ct):contexts[ct]={}
         if not contexts[ct].has_key("trunkroutes"):contexts[ct]["trunkroutes"]=[]
         contexts[ct]["trunkroutes"].append(vm)
