@@ -135,7 +135,7 @@ def dialplan(fs_conf_path):
     all_context = base_models.Context.objects.all()
     for vm in all_context:
         ct = vm.id#vm.number.context.id
-        # if contexts.has_key(ct):
+        if not contexts.has_key(ct):contexts[ct]={}
         contexts[ct]['endtype'] = vm.end_type
         contexts[ct]['tts_string'] = vm.tts_string
         contexts[ct]['media_file'] = vm.media_file
