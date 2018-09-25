@@ -32,6 +32,11 @@
 			{% if sipprofile.register_net_list: %}
 			<param name="apply-register-acl" value="{{ sipprofile.register_net_list.get_name() }}"/>
 			{% endif %}
+			{% if sipprofile.id==1 %}
+                        <param name="ws-binding"  value=":5066"/>
+                        <param name="tls-cert-dir" value="/usr/local/freeswitch/certs"/>
+                        <param name="wss-binding" value=":7443"/>
+			{% endif %}
 			{#<!--
 			<param name="odbc-dsn" value="{{ odbc_credentials } }}"/>
 			<param name="dbname" value="{{ sipprofile.presence_db_name }}"/>
@@ -73,6 +78,9 @@
 				<param name="register" value="{{ gateway.get_register()|string|lower }}"/>
 				{% if gateway.server: %}
 				<param name="realm" value="{{ gateway.server }}"/>
+				{% endif %}
+                {% if gateway.simpleroute_caller_id_number %}
+                		<param name="from-user" value="{{ gateway.simpleroute_caller_id_number }}"/>
 				{% endif %}
 				{#<!--
 				<param py:if="gateway.from_user" name="from-user" value="{{ gateway.from_user }}"/>
