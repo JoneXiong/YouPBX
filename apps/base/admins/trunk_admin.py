@@ -17,5 +17,6 @@ class TrunkAdmin(ReXmlAdmin):
     menu_group = 'trunk_group'
     order = 2
     model_icon = fa_icon('cogs')
+    list_display = ['name','simpleroute_caller_id_number','context']
 
 site.register(models.Trunk, TrunkAdmin)

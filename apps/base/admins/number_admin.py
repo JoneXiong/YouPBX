@@ -10,6 +10,7 @@ class NumberAdmin(ReXmlAdmin):
     
     menu_group = 'cat_group'
     order = 3
+    #hidden_menu = True
 
 class NumberPool(ReXmlAdmin):
     
