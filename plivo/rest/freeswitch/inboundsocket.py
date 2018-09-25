@@ -360,7 +360,6 @@ class RESTInboundSocket(InboundEventSocket):
         # if plivo_app != 'true', check b leg Dial callback
 
         plivo_app_flag = event['variable_plivo_app'] == 'true'
-        print 'ddddddddddddddddddddddddddd',event
         if not plivo_app_flag:
             # request Dial callbackUrl if needed
             ck_url = event['variable_plivo_dial_callback_url']
@@ -396,7 +395,7 @@ class RESTInboundSocket(InboundEventSocket):
 
         # Handle incoming call hangup
         if direction == 'inbound':
-            print 'inbound--------------',event
+            print 'inbound--------------',event['Event-Name']
             call_uuid = event['Unique-ID']
             reason = event['Hangup-Cause']
             # send hangup
@@ -406,7 +405,7 @@ class RESTInboundSocket(InboundEventSocket):
                 self.log.error(str(e))
         # Handle outgoing call hangup
         else:
-            print 'outbound--------------',event
+            print 'outbound--------------',event['Event-Name']
             # check if found a request uuid
             # if not, ignore hangup event
             request_uuid = event['variable_plivo_request_uuid']
@@ -595,7 +594,7 @@ class RESTInboundSocket(InboundEventSocket):
             params['From'] = caller_num or ''
             params['Direction'] = direction or ''
             params['CallStatus'] = 'completed'
-            print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123456'
+            print '>>> start request hangup url'
             spawn_raw(self.send_to_url, hangup_url, params)
 
     def send_to_url(self, url=None, params={}, method=None):
@@ -650,17 +649,17 @@ class RESTInboundSocket(InboundEventSocket):
                 if gw.timeout:
                     _options.append("originate_timeout=%s" % gw.timeout)
                 # Set early media
-                _options.append("ignore_early_media=true")
+                _options.append("ignore_early_media=false")
                 # Build originate dial string
                 options = ','.join(_options)
                 outbound_str = "&socket('%s async full')" \
                                 % self.get_server().fs_out_address
 
                 dial_str = "originate {%s,%s}%s%s %s" \
-                    % (call_req.extra_dial_string, options, gw.gw, gw.to, outbound_str)
+                    % (call_req.extra_dial_string, options, gw.gw, gw.fm, outbound_str)
                 self.log.debug("Call try for RequestUUID %s with Gateway %s" \
                             % (request_uuid, gw.gw))
-                # Execute originate on background
+                # Execute originate on background 电话呼叫关键点
                 self.log.debug("spawn_originate: %s" % str(dial_str))
                 bg_api_response = self.bgapi(dial_str)
                 job_uuid = bg_api_response.get_job_uuid()
