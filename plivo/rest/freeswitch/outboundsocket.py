@@ -135,7 +135,8 @@ class PlivoOutboundEventSocket(OutboundEventSocket):
     def _protocol_send(self, command, args=''):
         """Access parent method _protocol_send
         """
-        self.log.debug("Execute: %s args='%s'" % (command, safe_str(args)))
+        # 发送协议内容
+        self.log.debug("Execute: [%s] args='%s'" % (command, safe_str(args)))
         response = super(PlivoOutboundEventSocket, self)._protocol_send(
                                                                 command, args)
         self.log.debug("Response: %s" % str(response))
@@ -146,7 +147,8 @@ class PlivoOutboundEventSocket(OutboundEventSocket):
     def _protocol_sendmsg(self, name, args=None, uuid='', lock=False, loops=1):
         """Access parent method _protocol_sendmsg
         """
-        self.log.debug("Execute: %s args=%s, uuid='%s', lock=%s, loops=%d" \
+        # 发送协议消息内容
+        self.log.debug("Execute: [%s] args=%s, uuid='%s', lock=%s, loops=%d" \
                       % (name, safe_str(args), uuid, str(lock), loops))
         response = super(PlivoOutboundEventSocket, self)._protocol_sendmsg(
                                                 name, args, uuid, lock, loops)
@@ -163,7 +165,7 @@ class PlivoOutboundEventSocket(OutboundEventSocket):
         self.log.debug("wait for action start")
         try:
             event = self._action_queue.get(timeout=timeout)
-            self.log.debug("wait for action end %s" % str(event))
+            self.log.debug("wait for action end %s" % str(event['Event-Name']))
             if raise_on_hangup is True and self.has_hangup():
                 self.log.warn("wait for action call hung up !")
                 raise RESTHangup()
@@ -368,6 +370,9 @@ class PlivoOutboundEventSocket(OutboundEventSocket):
             # Set From to Session Params
             self.session_params['From'] = from_no.lstrip('+')
 
+            userkey = channel.get_header("variable_plivo_userkey")
+            self.session_params['userkey'] = userkey
+
             # Look for variables in channel headers
             aleg_uuid = channel.get_header('Caller-Unique-ID')
             aleg_request_uuid = channel.get_header('variable_plivo_request_uuid')
@@ -413,7 +418,10 @@ class PlivoOutboundEventSocket(OutboundEventSocket):
             self.session_params['To'] = called_no.lstrip('+')
             # Set From to Session Params
             self.session_params['From'] = from_no.lstrip('+')
-            
+
+            userkey = channel.get_header("variable_plivo_userkey")
+            self.session_params['userkey'] = userkey
+
             # Look for target url in order below :
             #  get plivo_transfer_url from channel var
             #  get plivo_answer_url from channel var
