@@ -17,7 +17,11 @@
 		{% endif %}
       </condition>
       <condition field="destination_number" expression="{{ object.route.get_expression() }}" bluebox="pattern_{{ object.route.id }}_out">
+        <action application="set" data="RECORD_STEREO=true"/>
+        <action application="record_session" data="$${recordings_dir}/${uuid}.wav"/>
+        <action application="set" data="hangup_after_bridge=true"/>
         <action application="bridge" bluebox="out_trunk_{{ object.trunk.id }}" data="sofia/gateway/trunk_{{ object.trunk.id }}/${prepend}$1"/>
+        <action application="hangup"/>
       </condition>
     </extension>
 	{% endfor %}
