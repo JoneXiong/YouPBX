@@ -595,15 +595,21 @@ class Dial(Element):
 
     action: submit the result of the dial and redirect to this URL
     method: submit to 'action' url using GET or POST
+    单腿挂断
     hangupOnStar: hangup the b leg if a leg presses start and this is true
     callerId: caller id to be send to the dialed number
+    限时挂断
     timeLimit: hangup the call after these many seconds. 0 means no timeLimit
+
     confirmSound: Sound to be played to b leg before call is bridged
     confirmKey: Key to be pressed to bridge the call.
+
     dialMusic: Play music to a leg while doing a dial to b leg
                 Can be a list of files separated by comma
+
     redirect: if 'false', don't redirect to 'action', only request url
         and continue to next element. (default 'true')
+
     callbackUrl: url to request when bridge starts and bridge ends
     callbackMethod: submit to 'callbackUrl' url using GET or POST
     """
@@ -630,19 +636,22 @@ class Dial(Element):
         self.action = self.extract_attribute_value('action')
         self.caller_id = self.extract_attribute_value('callerId')
         self.caller_name = self.extract_attribute_value('callerName')
+
         try:
             self.time_limit = int(self.extract_attribute_value('timeLimit',
                                                       self.DEFAULT_TIMELIMIT))
         except ValueError:
             self.time_limit = self.DEFAULT_TIMELIMIT
-        if self.time_limit <= 0:
-            self.time_limit = self.DEFAULT_TIMELIMIT
+        #if self.time_limit <= 0:
+        #    self.time_limit = self.DEFAULT_TIMELIMIT
+
         try:
             self.timeout = int(self.extract_attribute_value("timeout", -1))
         except ValueError:
             self.timeout = -1
         if self.timeout <= 0:
             self.timeout = -1
+
         self.confirm_sound = self.extract_attribute_value("confirmSound")
         self.confirm_key = self.extract_attribute_value("confirmKey")
         self.dial_music = self.extract_attribute_value("dialMusic")
@@ -791,30 +800,32 @@ class Dial(Element):
 
     def execute(self, outbound_socket):
         numbers = []
-        # Set timeout
+        # 超时时间处理Set timeout
         if self.timeout > 0:
             outbound_socket.set("call_timeout=%d" % self.timeout)
         else:
             outbound_socket.unset("call_timeout")
 
-        # Set callerid or unset if not provided
+        # 主叫号码设置 Set callerid or unset if not provided
         if self.caller_id == 'none':
             outbound_socket.set("effective_caller_id_number=''")
         elif self.caller_id:
             outbound_socket.set("effective_caller_id_number=%s" % self.caller_id)
         else:
             outbound_socket.unset("effective_caller_id_number")
-        # Set callername or unset if not provided
+        # 主叫名称设置 Set callername or unset if not provided
         if self.caller_name == 'none':
             outbound_socket.set("effective_caller_id_name=''")
         elif self.caller_name:
             outbound_socket.set("effective_caller_id_name='%s'" % self.caller_name)
         else:
             outbound_socket.unset("effective_caller_id_name")
-        # Set continue on fail
+
+        # 失败后继续 Set continue on fail
         outbound_socket.set("continue_on_fail=true")
-        # Don't hangup after bridge !
-        outbound_socket.set("hangup_after_bridge=false")
+
+        # 接通的电话直接挂断 Don't hangup after bridge !
+        # outbound_socket.set("hangup_after_bridge=false")
 
         # Set ring flag if dial will ring.
         # But first set plivo_dial_rang to false
@@ -823,7 +834,7 @@ class Dial(Element):
         ring_flag = "api_on_ring='uuid_setvar %s plivo_dial_rang true',api_on_pre_answer='uuid_setvar %s plivo_dial_rang true'" \
                     % (outbound_socket.get_channel_unique_id(), outbound_socket.get_channel_unique_id())
 
-        # Set numbers to dial from Number nouns
+        # 被叫号码设置 Set numbers to dial from Number nouns
         for child in self.children:
             if isinstance(child, Number):
                 dial_num = self.create_number(child, outbound_socket)
@@ -836,10 +847,12 @@ class Dial(Element):
         # Create dialstring
         self.dial_str = ':_:'.join(numbers)
 
-        # Set time limit: when reached, B Leg is hung up
-        sched_hangup_id = str(uuid.uuid1())
-        dial_time_limit = "api_on_answer_1='sched_api +%d %s uuid_transfer %s -bleg hangup:ALLOTTED_TIMEOUT inline'" \
-                      % (self.time_limit, sched_hangup_id, outbound_socket.get_channel_unique_id())
+        # 呼叫限制时长处理 Set time limit: when reached, B Leg is hung up
+        dial_time_limit = ''
+        if self.time_limit:
+            sched_hangup_id = str(uuid.uuid1())
+            dial_time_limit = ",api_on_answer_1='sched_api +%d %s uuid_transfer %s -bleg hangup:ALLOTTED_TIMEOUT inline'" \
+                          % (self.time_limit, sched_hangup_id, outbound_socket.get_channel_unique_id())
 
         # Set confirm sound and key or unset if not provided
         dial_confirm = ''
@@ -859,8 +872,8 @@ class Dial(Element):
                 confirm_cancel = "group_confirm_cancel_timeout=1"
                 dial_confirm = ",%s,%s,%s,playback_delimiter=!" % (confirm_music_str, confirm_key_str, confirm_cancel)
 
-        # Append time limit and group confirm to dial string
-        self.dial_str = '<%s,%s%s>%s' % (ring_flag, dial_time_limit, dial_confirm, self.dial_str)
+        # 拼接组合成呼叫字符串 Append time limit and group confirm to dial string
+        self.dial_str = '<%s%s%s>%s' % (ring_flag, dial_time_limit, dial_confirm, self.dial_str)
         # Ugly hack to force use of enterprise originate because simple originate lacks speak support in ringback
         if len(numbers) < 2:
             self.dial_str += ':_:'
@@ -885,6 +898,7 @@ class Dial(Element):
             else:
                 self.dial_music = ''
         if not self.dial_music:
+            # 默认走这里
             outbound_socket.set("bridge_early_media=false")
             outbound_socket.set("instant_ringback=true")
             outbound_socket.set("ringback=${us-ring}")
@@ -937,7 +951,7 @@ class Dial(Element):
                     outbound_socket.log.info("Dial unbridged")
                     break
                 elif event['Event-Name'] == 'CHANNEL_EXECUTE_COMPLETE':
-                    outbound_socket.log.info("Dial completed %s" % str(event))
+                    outbound_socket.log.info("Dial completed %s" % str(event['Event-Name']))
                     break
 
             # parse received events
@@ -966,11 +980,12 @@ class Dial(Element):
             outbound_socket.log.info("Dial Finished with reason: %s" \
                                      % reason)
             # Unschedule hangup task
-            outbound_socket.bgapi("sched_del %s" % sched_hangup_id)
+            if self.time_limit:
+                outbound_socket.bgapi("sched_del %s" % sched_hangup_id)
             # Get ring status
             dial_rang = outbound_socket.get_var("plivo_dial_rang") == 'true'
         finally:
-            # If action is set, redirect to this url
+            # 电话完成后请求回调 If action is set, redirect to this url
             # Otherwise, continue to next Element
             if self.action and is_valid_url(self.action):
                 params = {}
@@ -1379,16 +1394,21 @@ class Record(Element):
     action: submit the result of the record to this URL
     method: submit to 'action' url using GET or POST
     maxLength: maximum number of seconds to record (default 60)
+
     timeout: seconds of silence before considering the recording complete (default 500)
             Only used when bothLegs is 'false' !
     playBeep: play a beep before recording (true/false, default true)
             Only used when bothLegs is 'false' !
+
     finishOnKey: Stop recording on this key
+
     fileFormat: file format (default mp3)
     filePath: complete file path to save the file to
     fileName: Default empty, if given this will be used for the recording
+
     bothLegs: record both legs (true/false, default false)
               no beep will be played
+
     redirect: if 'false', don't redirect to 'action', only request url
         and continue to next element. (default 'true')
     """
@@ -1434,8 +1454,8 @@ class Record(Element):
             max_length = int(max_length)
         except (ValueError, TypeError):
             raise RESTFormatException("Record 'maxLength' must be a positive integer")
-        if max_length < 1:
-            raise RESTFormatException("Record 'maxLength' must be a positive integer")
+        #if max_length < 1:
+        #    raise RESTFormatException("Record 'maxLength' must be a positive integer")
         self.max_length = str(max_length)
         # Validate timeout
         try:
@@ -1457,16 +1477,21 @@ class Record(Element):
         record_file = "%s%s.%s" % (self.file_path, filename, self.file_format)
 
         if self.both_legs:
-            outbound_socket.set("RECORD_STEREO=true")
+            #outbound_socket.set("RECORD_STEREO=true")
+            #outbound_socket.set("RECORD_ANSWER_REQ=true")
+            #outbound_socket.set("media_bug_answer_req=true")
+            outbound_socket.api("uuid_setvar %s RECORD_STEREO true"%outbound_socket.get_channel_unique_id())
             outbound_socket.api("uuid_record %s start %s" \
                                 %  (outbound_socket.get_channel_unique_id(),
                                    record_file)
                                )
-            outbound_socket.api("sched_api +%s none uuid_record %s stop %s" \
-                                % (self.max_length,
-                                   outbound_socket.get_channel_unique_id(),
-                                   record_file)
-                               )
+            if int(self.max_length)>0:
+                outbound_socket.api("sched_api +%s none uuid_record %s stop %s" \
+                                    % (self.max_length,
+                                       outbound_socket.get_channel_unique_id(),
+                                       record_file)
+                                   )
+
             outbound_socket.log.info("Record Both Executed")
         else:
             if self.play_beep:
@@ -1478,9 +1503,11 @@ class Record(Element):
                                 % str(event.get_header('Application-Response')))
             outbound_socket.start_dtmf()
             outbound_socket.log.info("Record Started")
+
             outbound_socket.record(record_file, self.max_length,
                                 self.silence_threshold, self.timeout,
                                 self.finish_on_key)
+
             event = outbound_socket.wait_for_action()
             outbound_socket.stop_dtmf()
             outbound_socket.log.info("Record Completed")

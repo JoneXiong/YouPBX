@@ -200,8 +200,8 @@ class HTTPRequest:
                 if v:
                     _params[k] = v[-1]
         if log:
-            log.info("Fetching %s %s with %s" \
-                            % (method, uri, _params))
+            log.info("Fetching %s %s" \
+                            % (method, uri))
         req = self._prepare_http_request(uri, _params, method)
         res = urllib2.urlopen(req).read()
         if log:
