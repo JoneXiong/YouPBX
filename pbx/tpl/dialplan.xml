@@ -10,6 +10,7 @@
 	{% include "dialplan/dialplan_extension_ringgroup.xml" %}
 	{% include "dialplan/dialplan_extension_attendant.xml" %}
 	{% include "dialplan/dialplan_extension_conference.xml" %}
+    {% include "dialplan/dialplan_extension.xml" %}
 	
 	{% if context.tts_string or context.media_file %}
 	<extension name="end_notice_context_{{ context.id }}" continue="true">
