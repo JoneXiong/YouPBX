@@ -41,11 +41,12 @@ class Gateway(object):
     __slots__ = ('__weakref__',
                  'request_uuid',
                  'to', 'gw', 'codecs',
-                 'timeout'
+                 'timeout', 'fm'
                 )
 
-    def __init__(self, request_uuid, to, gw, codecs, timeout):
+    def __init__(self, request_uuid, to, gw, codecs, timeout, fm):
         self.request_uuid = request_uuid
+        self.fm = fm
         self.to = to
         self.gw = gw
         self.codecs = codecs
@@ -319,7 +320,7 @@ class PlivoRestApi(object):
             except (ValueError, IndexError):
                 timeout = 60 # TODO allow no timeout ?
             for i in range(retry):
-                gateway = Gateway(request_uuid, to, gw, codecs, timeout)
+                gateway = Gateway(request_uuid, to, gw, codecs, timeout, caller_id)
                 gateways.append(gateway)
 
         call_req = CallRequest(request_uuid, gateways, answer_url, ring_url, hangup_url, 
