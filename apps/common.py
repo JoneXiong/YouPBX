@@ -53,4 +53,5 @@ class ReXmlAdmin(object):
             return {'code': 0}
         else:
             return {'code': -10, 'msg': u'请先进行【FS系统配置】'}
-        
+
+
