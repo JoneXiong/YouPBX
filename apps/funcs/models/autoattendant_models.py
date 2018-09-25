@@ -99,3 +99,4 @@ class AutoattendantKeymapping(models.Model):
             # value is False, remove existing binding
             ir_values_obj.unlink(cursor, user, values_ids, context=ctx)
     
+
