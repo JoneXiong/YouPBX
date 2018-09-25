@@ -186,6 +186,7 @@ class Commands(object):
 
         For Inbound connection, uuid argument is mandatory.
         """
+        print '>>> to bridge:',args # 转向接通关键命令
         return self._protocol_sendmsg("bridge", args, uuid, lock)
 
     def hangup(self, cause="", uuid="", lock=True):

@@ -300,6 +300,7 @@ class EventSocket(Commands):
         '''
         # When no callbacks found, try unbound_event.
         try:
+            print '>>> Event:',event['Event-Name']
             callback = self._event_callbacks[event['Event-Name']]
         except KeyError:
             callback = self._event_callbacks['unbound_event']
