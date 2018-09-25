@@ -4,16 +4,17 @@ from plivo.core.freeswitch.inboundsocket import InboundEventSocket
 from plivo.core.errors import ConnectError
 from plivo.utils.logger import StdoutLogger
 
-from config import event_socket_conf as conf
 
 log = StdoutLogger()
-inbound_event_listener = None
+
 
 def api(cmd, bg=False, ok_check=True):
-    global inbound_event_listener
+    #global inbound_event_listener
+    import event_socket
+    inbound_event_listener = event_socket.inbound_event_listener
     data = {}
     if not inbound_event_listener:
-        inbound_event_listener = InboundEventSocket(conf['host'], conf['port'], conf['pwd'], filter="BACKGROUND_JOB")
+        event_socket.connect()
     if not inbound_event_listener.connected:
         try:
             inbound_event_listener.connect()
@@ -65,3 +66,28 @@ def show_gateways():
 def show_regusers():
     cmd = 'sofia status profile xxx reg'
     return api(cmd)
+
+def call_spy(user,uuid):
+    cmd = 'originate %s &eavesdrop(%s)'%(user, uuid)
+    return api(cmd, bg=True)
+
+def send_agent_status_change_event(agent_number,status,status_str):
+    import event_socket
+    from dao import agent_dao
+    hander = event_socket.inbound_event_listener
+    event = "CUSTOM\nEvent-Name: CUSTOM\nEvent-Subclass: oe::agent_status_change\n" 
+    queues = agent_dao.get_agent_queues(agent_number)
+    print 'agent %s in queues %s'%(agent_number,queues)
+    param = {
+        'Event-Name': 'CUSTOM',
+        'Event-Subclass': 'oe::agent_status_change',
+        'Agent': agent_number,
+        'Agent-Status': status,
+        'StatusStr': status_str,
+        'Queues': ','.join(queues),
+    }
+    param_str = '\n'.join(['%s: %s'%(k,v) for k,v in param.items()])
+    cmd = 'CUSTOM\n%s\n'%param_str
+    hander.sendevent(cmd)
+    #event_tpl = 'Event-Name=CUSTOM,Event-Subclass=oe::agent_status_change,Agent=%s,Agent-Status=%s,StatusStr=%s'
+    #api('exec:event,'+ event_tpl%(agent_number,status,status_str))
