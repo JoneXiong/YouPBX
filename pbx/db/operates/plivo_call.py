@@ -16,6 +16,7 @@ plivo = plivohelper.REST(REST_API_URL, SID, AUTH_TOKEN, API_VERSION)
 
 def dail(from_number, to_number):
     u'''
+    拨通 A 到 B 的电话
     to outbound a single call
     '''
     call_params = {
@@ -37,6 +38,7 @@ def dail(from_number, to_number):
 
 def hangup(call_uuid):
     u'''
+    挂断某个电话
     Hangup call via Rest API
     '''
     hangup_call_params = {

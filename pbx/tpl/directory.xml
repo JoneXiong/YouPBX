@@ -3,13 +3,19 @@
 <include>
   {% for location  in locations %}
   <domain name="$${location_{{ location.id }}}">
+    <variables>
+    	<variable name="language" value="zh"/>
+	    <variable name="default_language" value="zh"/>
+    </variables>
     <groups>
       <group name="default">
         <users>
           {% for endpoint  in location.devices.all() %}
           <user bluebox_id="{{ endpoint.id }}" id="{{ endpoint.number.number }}">
             <params>
+                {% if endpoint.sip_password %}
 	            <param name='password' value='{{ endpoint.sip_password }}'/>
+                {% endif %}
                 <param name="dial-string" value="{presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(${dialed_user}@${dialed_domain})}"/>
 				{#<!--
 	            <param name='vm-password' value='{{ endpoint.voicemai.password }}'/>

@@ -2,7 +2,7 @@
 	<extension name="main_number_{{ object.number.id }}" continue="true">
       <condition field="destination_number" expression="^{{ object.number.number }}$">
         <action application="answer"/>
-        <action application="ivr" data="auto_attendant_{{ object.id }}"/>
+        <action application="ivr" data="oe_ivr_{{ object.id }}"/>
         <action application="hangup"/>
       </condition>
     </extension>

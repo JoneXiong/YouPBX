@@ -20,7 +20,7 @@ def create_sipinterface_with_ip(ip):
         obj.ip_address = ip
         obj.sip_port = 5060
         obj.nat_net_list_id = 2
-        obj.inbound_net_list_id = 5
+        #obj.inbound_net_list_id = 5
         obj.context_id = 1
         obj.auth = True
         obj.save()
@@ -55,7 +55,7 @@ def create_default_Sipinterface():
             obj.ip_address = ip
             obj.sip_port = 5060
             obj.nat_net_listi_id = 2
-            obj.inbound_net_list_id = 5
+            #obj.inbound_net_list_id = 5
             obj.context = 2 # Publicly Accessible
             obj.auth = True
             # ...
