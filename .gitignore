@@ -58,3 +58,7 @@ target/
 
 upload/
 .idea/
+
+
+migrations/
+config.py
