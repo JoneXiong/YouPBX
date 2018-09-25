@@ -66,7 +66,7 @@ def ivr_menus(fs_conf_path):
     u'''
     ivr_menus
     '''
-    menus = funcs_models.Autoattendant.objects.all()
+    menus = funcs_models.IVR.objects.all()
     m_data = jinja2_template('ivr_menus.xml', menus=menus) 
     m_file = os.path.join(fs_conf_path,'ivr_menus', 'oe_ivr.xml')
     f = open(m_file,'w+')
@@ -110,7 +110,7 @@ def dialplan(fs_conf_path):
         contexts[ct]["voicemails"].append(vm)
     devices = funcs_models.Device.objects.all()
     for vm in devices:
-        ct = vm.number.context.id
+        ct = vm.context.id
         if not contexts.has_key(ct):contexts[ct]={}
         if not contexts[ct].has_key("devices"):contexts[ct]["devices"]=[]
         contexts[ct]["devices"].append(vm)
@@ -120,12 +120,12 @@ def dialplan(fs_conf_path):
         if not contexts.has_key(ct):contexts[ct]={}
         if not contexts[ct].has_key("ringgroups"):contexts[ct]["ringgroups"]=[]
         contexts[ct]["ringgroups"].append(vm)
-    attendants = funcs_models.Autoattendant.objects.all()
-    for vm in attendants:
-        ct = vm.number.context.id
-        if not contexts.has_key(ct):contexts[ct]={}
-        if not contexts[ct].has_key("attendants"):contexts[ct]["attendants"]=[]
-        contexts[ct]["attendants"].append(vm)
+#     attendants = funcs_models.Autoattendant.objects.all()
+#     for vm in attendants:
+#         ct = vm.number.context.id
+#         if not contexts.has_key(ct):contexts[ct]={}
+#         if not contexts[ct].has_key("attendants"):contexts[ct]["attendants"]=[]
+#         contexts[ct]["attendants"].append(vm)
     conferences = funcs_models.Conference.objects.all()
     for vm in conferences:
         ct = vm.number.context.id
@@ -139,7 +139,13 @@ def dialplan(fs_conf_path):
         contexts[ct]['endtype'] = vm.end_type
         contexts[ct]['tts_string'] = vm.tts_string
         contexts[ct]['media_file'] = vm.media_file
-    
+    all_extens = funcs_models.Extension.objects.all() 
+    for exten in all_extens:
+        ct = 1#vm.number.context.id
+        if not contexts.has_key(ct):contexts[ct]={}
+        if not contexts[ct].has_key("extensions"):contexts[ct]["extensions"]=[]
+        contexts[ct]["extensions"].append(exten)
+
     for context_id in contexts.keys():
         context = contexts[context_id]
         context["id"] = context_id

@@ -1,25 +1,29 @@
 <?xml version="1.0"?>
 <include>
 	{% for menu  in menus %}
-	<menu name="auto_attendant_{{ menu.id }}" 
-			{%  if menu.registry_type=='audio': %}
-			greet-long="{{ menu.registry_mediafile.path() }}" 
-			greet-short="{{ menu.registry_mediafile.path() }}" 
-			{% else %}
-			tts-engine="cepstral" 
-			tts-voice="Allison-8kHz"
-			greet-long="say:{{ menu.registry_tts_string }}" 
-			greet-short="say:{{ menu.registry_tts_string }}" 
-			{% endif %}
-			timeout={{ menu.timeout }}* 1000
-			inter-digit-timeout={{ menu.digit_timeout }}* 1000
-			digit-len={{ extension_digits }}
+	<menu name="oe_ivr_{{ menu.id }}" 
+            greet-long="{{ menu.get_greet_long() }}" 
+            greet-short="{{ menu.get_greet_short() }}" 
+            
+            invalid-sound="{{ menu.get_invalid_sound() }}"
+            exit-sound="{{ menu.get_exit_sound() }}"
+            
+			timeout="{{ menu.timeout* 1000 }}"
+			inter-digit-timeout="{{ menu.digit_timeout* 1000 }}"
+			
+			digit-len="{{ menu.extension_digits }}"
+			max-timeouts="{{ menu.max_timeouts }}"
 			max-failures="{{ menu.registry_max_failures }}" >
 		{% for keymapping  in menu.keymappings.all() %}
-		{% if loop.first %}
-		<entry action="menu-exec-app" name="catch_all" digits="/^([0-9]{{ '{' ~ extension_digits ~ '}' }})$/" param="execute_extension $1 XML context_{{ keymapping.get_number().context_id }}" />
-		{% endif %}
-		<entry action="menu-exec-app" digits="{{ keymapping.digits }}" param="transfer {{ keymapping.get_number().number }} XML context_{{ keymapping.get_number().context_id }}"/>
+    		{% if loop.first %}
+    		<entry action="menu-exec-app" name="catch_all" digits="/^([0-9]{{ '{' ~ extension_digits ~ '}' }})$/" param="execute_extension $1 XML context_1" />
+    		{% endif %}
+    		
+    		{% if keymapping.action_type=='parent' %}
+    		<entry action="menu-top" digits="{{ keymapping.digits }}" />
+    		{% else %}
+            <entry action="{{ keymapping.get_exec()[0] }}" digits="{{ keymapping.digits }}" param="{{ keymapping.get_exec()[1] }}"/>
+    		{% endif %}
 		{% endfor %}
 	</menu>
 	{% endfor %}
