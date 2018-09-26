@@ -23,8 +23,8 @@ YouPBX 是一个强大 FreeSwift (电话软交换系统) 的管理GUI系统，�
 
 ![info](https://github.com/JoneXiong/YouPBX/raw/master/apps/base/static/base/images/youpbx2.jpg)
 
-# 讨论
+## 讨论
 PBX应用开发交流群 34288838
 
-### 获取商业支持
+## 获取商业支持
 联系 QQ 669229467
