@@ -18,7 +18,7 @@ def create_sipinterface_with_ip(ip):
         obj = SipInterface()
         obj.name = 'Authenticated SIP on %s'%ip
         obj.ip_address = ip
-        obj.sip_port = 5060
+        obj.port = 5060
         obj.nat_net_list_id = 2
         #obj.inbound_net_list_id = 5
         obj.context_id = 1
@@ -30,7 +30,7 @@ def create_sipinterface_with_ip(ip):
         obj = SipInterface()
         obj.name = 'Unauthenticated SIP on %s'%ip
         obj.ip_address = ip
-        obj.sip_port = 5080
+        obj.port = 5080
         obj.nat_net_list_id = 2
         obj.context_id = 1
         obj.auth = False
@@ -53,7 +53,7 @@ def create_default_Sipinterface():
             obj = SipInterface()
             obj.name = 'Authenticated SIP on %s'%ip
             obj.ip_address = ip
-            obj.sip_port = 5060
+            obj.port = 5060
             obj.nat_net_listi_id = 2
             #obj.inbound_net_list_id = 5
             obj.context = 2 # Publicly Accessible
@@ -64,7 +64,7 @@ def create_default_Sipinterface():
             obj = SipInterface()
             obj.name = 'Unauthenticated SIP on %s'%ip
             obj.ip_address = ip
-            obj.sip_port = 5080
+            obj.port = 5080
             obj.nat_net_list = 2
             obj.context = 2 # Publicly Accessible
             obj.auth = False
