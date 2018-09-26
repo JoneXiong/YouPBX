@@ -14,7 +14,7 @@ class Extension(models.Model):
                         ('device', u'分机'),
                         ('ivr', u'IVR语音菜单'),
                         ('conference', u'语音会议室'),
-                        ('queue', u'队列'),
+                        #('queue', u'队列'),
                         ('voicemail', u'语音邮箱'),
                     ], default='queue')
     action_to_id = models.IntegerField(u'跳转到', null=True, blank=True)

@@ -24,7 +24,7 @@ class ExtensionAdmin(ReXmlAdmin):
                 'device':widgets.ForeignKeyPopupWidget(self,models.Device,'id'),
                 'ivr': widgets.ForeignKeyPopupWidget(self,models.IVR,'id'),
                 'conference': widgets.ForeignKeyPopupWidget(self,models.Conference,'id'),
-                'queue': widgets.ForeignKeyPopupWidget(self,models.Queue,'id'),
+                #'queue': widgets.ForeignKeyPopupWidget(self,models.Queue,'id'),
                 'voicemail': widgets.ForeignKeyPopupWidget(self,models.VoiceMail,'id'),
             })
         if db_field.name == 'sound_content':

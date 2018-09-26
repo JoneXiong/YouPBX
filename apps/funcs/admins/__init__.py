@@ -34,3 +34,5 @@ site.register(models.VoiceMail, VoiceMailAdmin)
 
 import ringgroup_admin
 from . import device_admin
+from . import extension_admin
+from . import ivr_admin

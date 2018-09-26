@@ -13,7 +13,7 @@ def sound_field():
                                                               ('tts',u'TTS文字'),
                                                               ('number',u'数字播报'),
                                                               ('count',u'数目播报'),
-                                                              
+
                                                               ('tts_var',u'TTS文字(变量)'),
                                                               ('number_var',u'数字播报(变量)'),
                                                               ('count_var',u'数目播报(变量)'),
@@ -89,9 +89,9 @@ class IVRKeymapping(models.Model):
                         ('device', u'分机'),
                         ('ivr', u'IVR语音菜单'),
                         ('conference', u'语音会议室'),
-                        ('queue', u'队列'),
+                        #('queue', u'队列'),
                         ('voicemail', u'语音邮箱'),
-                        
+
                         ('parent', u'返回上层')
                     ])
     action_to_id = models.IntegerField(u'动作对象', null=True, blank=True)

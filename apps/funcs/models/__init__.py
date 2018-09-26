@@ -5,6 +5,8 @@ from device_models import *
 from ringgroup_models import *
 from timeroutes_models import *
 from voicemail_models import *
+from .extension_models import *
+from .ivr_models import *
 
 
     

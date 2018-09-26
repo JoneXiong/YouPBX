@@ -25,7 +25,7 @@ class IVRKeymappingInline(object):
                 'device':widgets.ForeignKeyPopupWidget(self,models.Device,'name'),
                 'ivr': widgets.ForeignKeyPopupWidget(self,models.IVR,'id'),
                 'conference': widgets.ForeignKeyPopupWidget(self,models.Conference,'id'),
-                'queue': widgets.ForeignKeyPopupWidget(self,models.Queue,'id'),
+                #'queue': widgets.ForeignKeyPopupWidget(self,models.Queue,'id'),
                 'voicemail': widgets.ForeignKeyPopupWidget(self,models.VoiceMail,'id'),
                 'parent': HiddenInput()
             },inline_ref='keymappings')
