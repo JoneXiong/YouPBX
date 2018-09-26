@@ -1,5 +1,7 @@
 # coding=utf-8
 
+from . import patch
+
 from xadmin import site
 from xadmin.views.dashboard import AppDashboard
 
