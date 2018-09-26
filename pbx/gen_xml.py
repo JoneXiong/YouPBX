@@ -120,12 +120,7 @@ def dialplan(fs_conf_path):
         if not contexts.has_key(ct):contexts[ct]={}
         if not contexts[ct].has_key("ringgroups"):contexts[ct]["ringgroups"]=[]
         contexts[ct]["ringgroups"].append(vm)
-#     attendants = funcs_models.Autoattendant.objects.all()
-#     for vm in attendants:
-#         ct = vm.number.context.id
-#         if not contexts.has_key(ct):contexts[ct]={}
-#         if not contexts[ct].has_key("attendants"):contexts[ct]["attendants"]=[]
-#         contexts[ct]["attendants"].append(vm)
+
     conferences = funcs_models.Conference.objects.all()
     for vm in conferences:
         ct = vm.number.context.id
@@ -139,7 +134,7 @@ def dialplan(fs_conf_path):
         contexts[ct]['endtype'] = vm.end_type
         contexts[ct]['tts_string'] = vm.tts_string
         contexts[ct]['media_file'] = vm.media_file
-    all_extens = funcs_models.Extension.objects.all() 
+    all_extens = []#funcs_models.Extension.objects.all()
     for exten in all_extens:
         ct = 1#vm.number.context.id
         if not contexts.has_key(ct):contexts[ct]={}
@@ -160,7 +155,7 @@ def gen_all(fs_conf_path):
     autoload_acl(fs_conf_path)
     autoload_locations(fs_conf_path)
     autoload_conferences(fs_conf_path)
-    ivr_menus(fs_conf_path)
+    #ivr_menus(fs_conf_path)
     directory(fs_conf_path)
     dialplan(fs_conf_path)
         
