@@ -76,4 +76,4 @@ def connect():
         inbound_event_listener.connect()
     except ConnectError, e:
         inbound_event_listener.log.error("EventSocket connect failed: %s" % str(e))
-        raise SystemExit('exit')
+        raise e

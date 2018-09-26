@@ -14,7 +14,10 @@ def api(cmd, bg=False, ok_check=True):
     inbound_event_listener = event_socket.inbound_event_listener
     data = {}
     if not inbound_event_listener:
-        event_socket.connect()
+        try:
+            event_socket.connect()
+        except ConnectError, e:
+            return {'code': -9, 'msg': 'connect failed !', 'data': data}
     if not inbound_event_listener.connected:
         try:
             inbound_event_listener.connect()
