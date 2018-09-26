@@ -32,6 +32,5 @@ site.register(models.Conference, ConferenceAdmin)
 site.register(models.TimeRoutes, TimeRoutesAdmin)
 site.register(models.VoiceMail, VoiceMailAdmin)
 
-import autoattendant_admin
 import ringgroup_admin
 from . import device_admin
