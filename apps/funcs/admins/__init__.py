@@ -6,13 +6,7 @@ from xadmin.utils import fa_icon
 from apps.funcs import models
 from apps.common import ReXmlAdmin
 
-class DeviceAdmin(ReXmlAdmin):
 
-    app_label = 'funcs'
-    menu_group = 'application_group'
-    order = 1
-    model_icon = fa_icon('phone')
-    
 class ConferenceAdmin(ReXmlAdmin):
 
     app_label = 'funcs'
@@ -34,10 +28,10 @@ class VoiceMailAdmin(ReXmlAdmin):
     model_icon = fa_icon('envelope')
 
 site.register(models.Conference, ConferenceAdmin)
-site.register(models.Device, DeviceAdmin)
 
 site.register(models.TimeRoutes, TimeRoutesAdmin)
 site.register(models.VoiceMail, VoiceMailAdmin)
 
 import autoattendant_admin
 import ringgroup_admin
+from . import device_admin

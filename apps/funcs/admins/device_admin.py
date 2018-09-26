@@ -15,10 +15,10 @@ class DeviceAdmin(ReXmlAdmin):
     menu_group = 'application_group'
     order = 1
     model_icon = fa_icon('phone')
-    hide_other_field = True
+    #hide_other_field = True
 
     form_layout = [
-        layout.TabHolder( 
+        layout.TabHolder(
             layout.Tab(
                 '基本设置',
                 'name','registry_ringtype','registry_timeout',
