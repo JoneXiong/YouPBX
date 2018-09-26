@@ -24,21 +24,21 @@
 			<param name="nonce-ttl" value="{{ sipprofile.nonce_ttl }}"/>
 			<param name="manage-presence" value="{{ sipprofile.manage_presence|string|lower }}"/>
 			<!--添加-->
-			{% if sipprofile.nat_net_list: %}
+			{%- if sipprofile.nat_net_list: %}
 			<param name="apply-nat-acl" value="{{ sipprofile.nat_net_list.get_name() }}"/>
-			{% endif %}
-			{% if sipprofile.inbound_net_list: %}
+			{%- endif %}
+			{%- if sipprofile.inbound_net_list: %}
 			<param name="apply-inbound-acl" value="{{ sipprofile.inbound_net_list.get_name() }}"/>
-			{% endif %}
-			{% if sipprofile.register_net_list: %}
+			{%- endif %}
+			{%- if sipprofile.register_net_list: %}
 			<param name="apply-register-acl" value="{{ sipprofile.register_net_list.get_name() }}"/>
-			{% endif %}
-			{% if sipprofile.id==1 %}
-                        <param name="ws-binding"  value=":5066"/>
-                        <param name="tls-cert-dir" value="/usr/local/freeswitch/certs"/>
-                        <param name="wss-binding" value=":7443"/>
-                        <param name="apply-candidate-acl" value="candidate"/>
-			{% endif %}
+			{%- endif %}
+			{%- if sipprofile.id==1 %}
+            <param name="ws-binding"  value=":5066"/>
+            <param name="tls-cert-dir" value="/usr/local/freeswitch/certs"/>
+            <param name="wss-binding" value=":7443"/>
+            <param name="apply-candidate-acl" value="candidate"/>
+			{%- endif %}
 			{#<!--
 			<param name="odbc-dsn" value="{{ odbc_credentials } }}"/>
 			<param name="dbname" value="{{ sipprofile.presence_db_name }}"/>
