@@ -1,6 +1,7 @@
-import django 
+import django
 from django.conf.urls import patterns, include, url
 from django.conf import settings
+from django.views.generic import RedirectView
 
 # Uncomment the next two lines to enable the admin:
 import xadmin
@@ -16,8 +17,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^$',RedirectView.as_view(url='/xadmin/')),
     url(r'^xadmin/', include(xadmin.site.urls)),
     url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_ROOT}),
-    url(r'^uploads/(?P<path>.*)', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}), 
+    url(r'^uploads/(?P<path>.*)', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 )
