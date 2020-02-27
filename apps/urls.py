@@ -19,9 +19,6 @@ defs.EMPTY_CHANGELIST_VALUE = None
 from django.contrib import admin
 admin.autodiscover()
 
-from callc import views
-from rests import interfaces
-
 urlpatterns = [
     url(r'^$',RedirectView.as_view(url='/xadmin/')),
     url(r'^admin/', include(admin.site.urls)),

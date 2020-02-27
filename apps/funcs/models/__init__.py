@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from autoattendant_models import *
+#from autoattendant_models import *
 from conference_models import *
 from device_models import *
 from ringgroup_models import *
