@@ -2,8 +2,8 @@
 import os
 import sys
 
-import gevent.monkey
-gevent.monkey.patch_all()
+# import gevent.monkey
+# gevent.monkey.patch_all()
 
 if __name__ == "__main__":
     PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
