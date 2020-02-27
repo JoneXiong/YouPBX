@@ -1,10 +1,8 @@
-# Django settings for wictrl project.
+# coding=utf-8
 
 import sys
 import os.path
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
 gettext = lambda s: s
 
 PROJECT_ROOT = os.path.join(
@@ -22,13 +20,14 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(PROJECT_ROOT, 'data.db'),                      # Or path to database file if using sqlite3.
+        'NAME': 'data.db',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
+from config import DATABASES
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = '*'
@@ -37,7 +36,7 @@ ALLOWED_HOSTS = '*'
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Asia/Shanghai'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -131,11 +130,28 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, "templates"),
 )
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+
     'django.contrib.staticfiles',
     'django.contrib.admin',
 
@@ -147,7 +163,7 @@ INSTALLED_APPS = (
 )
 
 DATE_FORMAT = 'Y-m-d'
-DATETIME_FORMAT = 'Y-m-d H:i'
+DATETIME_FORMAT = 'Y-m-d H:i:s'
 TIME_FORMAT = 'H:i'
 
 # A sample logging configuration. The only tangible logging
@@ -169,10 +185,10 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-#         'console': {
-#             'level': 'DEBUG',
-#             'class': 'logging.StreamHandler'
-#         },
+         'console': {
+             'level': 'DEBUG',
+             'class': 'logging.StreamHandler'
+         },
     },
     'loggers': {
         'django.request': {
@@ -189,12 +205,12 @@ LOGGING = {
 
 SESSION_SAVE_EVERY_REQUEST = False
 
-REMOTE_MEDIA_URL = 'http://meilatest.qiniudn.com'
+REMOTE_MEDIA_URL = 'http://xxx.qiniudn.com'
 
 QINIU_CONF = {
-              'access_key': 'o7Lv8DXCvYOQLBsLl4zcZBj6epECrxOQu1JNcxd4',
-              'secret_key': 'nn7-tSEdEGKpo07GK0xuDI6TkgL3-PoUIEIboMx9',
-              'bucket': 'meilatest'
+              'access_key': 'xxxxxxxxxxxxxxxxxxxxxxxxxx',
+              'secret_key': 'xxxxxxxxxxxxxxxxxxxxxxxxxx',
+              'bucket': 'xxxbucket'
               }
 
 XADMIN_SOCIAL_ENABLE = False
