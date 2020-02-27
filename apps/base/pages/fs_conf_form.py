@@ -29,6 +29,6 @@ class FsConf(ConfigFormPage):
     def save_forms(self):
         super(FsConf,self).save_forms()
         if '_init' in self.request.GET:
-            init.xml_init(self.options('fs_conf_path'))
+            init.fs_conf_dir_init(self.options('fs_conf_path'))
     
 site.register_page(FsConf)

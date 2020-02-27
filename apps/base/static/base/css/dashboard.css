@@ -1,0 +1,52 @@
+.dashboard-stats {
+    float: left;
+    width: 20%;
+}
+
+.dashboard-stats-item {
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    cursor: pointer;
+    height: 105px;
+    margin-right: 25px;
+    margin-bottom: 10px;
+    padding: 20px 20px;
+}
+
+.dashboard-stats-item .m-top-none {
+    margin-top: 2px;
+}
+
+.dashboard-stats-item h2 {
+    font-size: 35px;
+    font-family: inherit;
+    line-height: 1.1;
+    font-weight: 500;
+}
+
+.dashboard-stats-item h5 {
+    font-size: 14px;
+    font-family: inherit;
+    margin-top: 3px;
+    line-height: 1.1;
+}
+
+
+.dashboard-stats-item .stat-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    opacity: .3;
+}
+
+.dashboard-stats i.fa.stats-icon {
+    width: 50px;
+    padding: 20px;
+    font-size: 50px;
+    text-align: center;
+    color: #fff;
+    height: 50px;
+    border-radius: 10px;
+}

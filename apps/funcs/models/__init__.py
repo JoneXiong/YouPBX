@@ -1,12 +1,11 @@
 # coding=utf-8
 
+from autoattendant_models import *
 from conference_models import *
 from device_models import *
 from ringgroup_models import *
 from timeroutes_models import *
 from voicemail_models import *
-from .extension_models import *
-from .ivr_models import *
 
 
     

@@ -11,6 +11,7 @@ class NumberAdmin(ReXmlAdmin):
     menu_group = 'cat_group'
     order = 3
     #hidden_menu = True
+    search_fields = ['number']
 
 class NumberPool(ReXmlAdmin):
     

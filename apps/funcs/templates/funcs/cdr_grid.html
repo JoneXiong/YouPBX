@@ -1,0 +1,17 @@
+{% extends 'xadmin/views/grid.html' %}
+{% load i18n xadmin_tags %}
+
+{% block extrabody %}
+{{block.super}}
+<script>
+
+    $(document).ready(function($) {
+            $('.call-number').click(function(){
+                $this = $(this);
+                $('#to_number', window.parent.document).val($this.attr('data-number'));
+                //$('#dial-btn', window.parent.document).trigger("click");
+                window.parent.document.getElementById('dial-btn').click();
+            })
+    });
+</script>
+{% endblock %}

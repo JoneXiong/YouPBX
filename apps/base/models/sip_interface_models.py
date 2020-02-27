@@ -20,7 +20,7 @@ class SipInterface(models.Model):
     context = models.ForeignKey('base.Context', verbose_name="路由组(Context)", default=1)
 
     auth = models.BooleanField(u'需要验证', default=True)
-    multiple = models.BooleanField(u'允许多机注册到同一号码')
+    multiple = models.BooleanField(u'允许多机注册到同一号码', default=False)
     behind_nat = models.BooleanField(u'是否自动NAT穿透', default=True)
 
     nat_type = models.PositiveSmallIntegerField('NAT穿透方式', choices=((1, 'Detect IP via uPnP'),(2, 'Detect IP via STUN Server')) , default=1)
@@ -30,9 +30,9 @@ class SipInterface(models.Model):
     register_net_list = models.ForeignKey('base.Netlist', verbose_name="注册控制", blank=True,null=True, related_name='register_nets')
 
     # 注册登记相关
-    registry_compact_headers = models.BooleanField(u'Registry压缩头数据')
-    registry_detect_nat_on_registration = models.BooleanField(u'Registry主动NAT探测')
-    registry_force_rport = models.BooleanField(u'Registry用网络IP端口作为RTP(rport)')
+    registry_compact_headers = models.BooleanField(u'Registry压缩头数据', default=False)
+    registry_detect_nat_on_registration = models.BooleanField(u'Registry主动NAT探测', default=False)
+    registry_force_rport = models.BooleanField(u'Registry用网络IP端口作为RTP(rport)', default=False)
 
     #other
     manage_presence = True

@@ -3,7 +3,7 @@
 import threading
 import time
 
-from pbx import gen_xml
+from pbx import conf
 from pbx.rpc import in_api
 from base.pages import FsConf
 
@@ -13,14 +13,14 @@ class make_xml_thread(threading.Thread):
         threading.Thread.__init__(self)
         self.interval = interval
         self.fs_conf_path = fs_conf_path
- 
+
     def run(self):
         if self.interval:time.sleep(self.interval)
-        gen_xml.gen_all(self.fs_conf_path)
+        conf.gen_all(self.fs_conf_path)
         in_api.reload_xml()
 
 class ReXmlAdmin(object):
-    
+
     def do_add(self):
         super(ReXmlAdmin,self).do_add()
         res = self._rexml()

@@ -16,6 +16,7 @@ class DeviceAdmin(ReXmlAdmin):
     order = 1
     model_icon = fa_icon('phone')
     #hide_other_field = True
+    search_fields = ['name']
 
     form_layout = [
         layout.TabHolder(
@@ -26,8 +27,8 @@ class DeviceAdmin(ReXmlAdmin):
             ),
             layout.Tab(
                 '高级设置',
-                'class_type','context','location','callerid_internal_name','callerid_internal_number',
-                'callerid_external_name','callerid_external_number','media_mode','sip_username','sip_password',
+                'class_type','context','location','sip_username','sip_password','callerid_internal_name','callerid_internal_number',
+                'callerid_external_name','callerid_external_number','media_mode',
                 'sip_caller_id_field','sip_cid_format','sip_invite_format','voicemail','registry_ignoreFWD',
                 css_id = 'tab2'
             )

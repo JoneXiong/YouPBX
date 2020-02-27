@@ -1,0 +1,75 @@
+{% extends "xadmin/main.html" %}
+{% load i18n xadmin_tags %}
+
+
+{% block extrastyle %}
+{{ block.super }}
+    <!-- 通知插件 Toastr style -->
+    <link href="/static/inspinia/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <link href="/static/inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+<style style="text/css">
+.btn-lg {
+  padding: 8px 26px;
+}
+.chat-user{
+  padding: 4px 5px;
+}
+.agent-status {
+  margin-top: 2px;
+}
+</style>
+{% endblock %}
+
+{% block ext_class %}skin-black fixed sidebar-mini{% endblock %}
+
+    {% block header %}
+      {% include 'base/includes/header.html' %}
+    {% endblock %}
+
+    {% block left_menu %}
+    <aside class="main-sidebar">
+    <section style="height: auto;" class="sidebar">
+
+                        {% if user.profile and user.profile.agent %}
+  <ul class="sidebar-menu tree" data-widget="tree">
+    <li class="header">队列状态</li>
+                                {% for queue in queues %}
+                                <li class="treeview {% if forloop.first %}active{% endif %}">
+                                   <a href="#" class="section"><i class="fa fa-sitemap"></i> <span class="nav-label">{{ queue.name }}</span></a>
+                                    <ul class="treeview-menu menu-open">
+                                        {% for agent in queue.agents %}
+                                        <li>
+                                        <a href="javascript:void(0)">
+                                            <i class="fa fa-lg fa-user" style="color:{{ agent.status_color }};"></i> {{agent.number}} {% firstof agent.nickname '' %} 
+                                            <button type="button" class="btn btn-primary btn-xs pull-right btn-spy" id="spy-{{ agent.number }}" style="display:{% if can_spy and agent.status_uuid %}block{% else %}none{% endif %}">监听</button>
+                                            <span class="label label-{{ agent.status_style }} pull-right agent-status" id="agent-{{ agent.number }}" uuid="{{agent.status_uuid}}">{{ agent.status_show }}</span>
+                                        </a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                {% endfor %}
+    </ul>
+                        {% endif%}
+
+        {% block navbar %}
+        {% if nav_menu %}
+          {% include menu_template %}
+        {% else %}
+          <p></p>
+        {% endif %}
+      {% endblock %}
+      {% view_block 'left_navbar' %}
+    </section>
+    </aside>
+    {% endblock %}
+
+{% block extrabody %}
+{{ block.super }}
+    <!-- Toastr -->
+    <script src="/static/inspinia/js/plugins/toastr/toastr.min.js"></script>
+    <script src="/static/inspinia/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript" src="{% static "base/js/long.js" %}"></script>
+{% endblock %}

@@ -14,7 +14,7 @@ class Location(models.Model):
 
     class Meta:
         app_label = 'base'
-        verbose_name = u'域(Domain)'
+        verbose_name = u'域(Location)'
         verbose_name_plural = verbose_name
 
     def __unicode__(self):

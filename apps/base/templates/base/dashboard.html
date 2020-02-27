@@ -1,0 +1,95 @@
+{% extends base_template %}
+{% load i18n xadmin_tags %}
+
+{% block extrastyle %}
+<link href="{% static "base/css/dashboard.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+{% block content-nav %}{% endblock %}
+
+
+{% block content %}
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="icon chevron"><a href="/xadmin/funcs/cdrcount/">查看历史</a></i>
+                    <i class="fa fa-line-chart fa-lg" style="padding-right: 5px;"></i>今日指标
+                </div>
+                <div class="panel-body">
+
+                    <div class="dashboard-stats">
+                        <a href="/xadmin/funcs/cdr/?_p_bill_long=1">
+                        <div class="dashboard-stats-item" style="background-color: #6bafbd;">
+                            <h2 class="m-top-none">{{ count_info.1_m }}</h2>
+                            <h5>1分钟电话量</h5>
+                            <div class="stat-icon">
+                                <i class="fa fa-hdd-o fa-3x"></i>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+                    <div class="dashboard-stats">
+                        <a href="/xadmin/funcs/cdr/?_p_bill_long=2">
+                        <div class="dashboard-stats-item" style="background-color: #f3ce85;">
+                            <h2 class="m-top-none">{{ count_info.3_m }}</h2>
+                            <h5>3分钟电话量</h5>
+                            <div class="stat-icon">
+                                <i class="fa fa-shopping-cart fa-3x"></i>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+
+                    <div class="dashboard-stats">
+                        <a href="/xadmin/funcs/cdr/?1=1">
+                        <div class="dashboard-stats-item" style="background-color: #949FB1;">
+                            <h2 class="m-top-none">{{ count_info.call_count }}</h2>
+                            <h5>外呼数</h5>
+                            <div class="stat-icon">
+                                <i class="fa fa-gavel fa-3x"></i>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+                    <div class="dashboard-stats">
+                        <a href="/xadmin/funcs/cdr/?_p_duration__gt=0">
+                        <div class="dashboard-stats-item" style="background-color: #fc8675;">
+                            <h2 class="m-top-none">{{ count_info.bridge_count }}</h2>
+                            <h5>接通数</h5>
+                            <div class="stat-icon">
+                                <i class="fa fa-user fa-3x"></i>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+                    <div class="dashboard-stats">
+                        <a href="/xadmin/funcs/cdr/?_p_bill_long=3">
+                        <div class="dashboard-stats-item" style="background-color: #65cea7; margin-right: 0px;">
+                            <h2 class="m-top-none">{{ count_info.answer_count }}</h2>
+                            <h5>客户应答数</h5>
+                            <div class="stat-icon">
+                                <i class="fa fa-truck fa-3x"></i>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            </div>
+
+
+
+<div class="dashboard row">
+  {% for c in columns %}
+  <div class="{{ c.0 }} column">
+    {% for widget in c.1 %}
+      {{ widget.widget|safe }}
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+<input type='hidden' id='_portal_key' value='{{ portal_key }}' />
+{% endblock %}

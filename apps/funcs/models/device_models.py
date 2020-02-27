@@ -25,7 +25,7 @@ class Device(models.Model):
 
     media_mode = models.CharField(u'音频传输模式', max_length=10, choices=[('psp',u'服务器中转'),('p2p',u'点对点')], default='psp')
 
-    sip_username = models.CharField(u'SIP用户名', max_length=64, blank=True, null=True)
+    sip_username = models.CharField(u'SIP名字', max_length=64, blank=True, null=True)
     sip_password = models.CharField(u'SIP密码', max_length=64, blank=True, null=True)
 
     sip_caller_id_field = models.CharField(u'Outbound Caller ID Field', max_length=10, choices=[('rpid',u'Remote-Party-Id'),('pid',u'P-Asserted-Identity'),('from',u'From: Field')], default='rpid')
@@ -34,6 +34,9 @@ class Device(models.Model):
 
     voicemail = models.ForeignKey('funcs.VoiceMail', verbose_name="发送通知邮箱", blank=True, null=True)
     number = models.ForeignKey('base.Number', blank=True, null=True,editable=False)
+    mobile = models.CharField(u'手机号', max_length=64, blank=True, null=True)
+    db_name = models.CharField(u'所在db', max_length=64, blank=True, null=True)
+    ukey = models.CharField(u'用户标识', max_length=64, blank=True, null=True)
 
     registry_ringtype = models.CharField(u'响铃模式', max_length=10, choices=[('ringing',u'Ringing'), ('moh',u'Hold Music')], default='ringing')
     registry_timeout = models.IntegerField(u'响铃时长(秒)', default=30)
@@ -49,5 +52,28 @@ class Device(models.Model):
         verbose_name_plural = verbose_name
 
     def __unicode__(self):
-        return self.name
+        return '%s %s'%(self.name, self.sip_username or '')
 
+
+    def get_trunk_key(self):
+        context = self.context
+        trunks = context.context_trunks.all()
+        if trunks:
+            return trunks[0].get_trunk_key()
+        else:
+            return 'trunk_0'
+
+    def get_callstr(self, answer_type, answer_number=None):
+        if answer_type=='mobile':
+            answer_number = answer_number or self.mobile
+            return 'sofia/gateway/%s/|%s'%(self.get_trunk_key(), answer_number)
+        else:
+            answer_number = answer_number or self.name
+            return 'user/|%s@%s'%(answer_number, self.location.domain_name)
+
+
+    def get_callee_str(self, callee):
+        if len(str(callee))>4:
+            return 'sofia/gateway/%s/|%s'%(self.get_trunk_key(), callee)
+        else:
+            return 'user/|%s@120.77.171.50'%callee

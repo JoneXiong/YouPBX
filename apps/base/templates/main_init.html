@@ -1,0 +1,154 @@
+{% extends base_template %}
+{% load i18n xadmin_tags %}
+
+{% block extrastyle %}
+<style style="text/css">
+body,html{margin: 0;padding 0;height: 100%;}
+#sap-container{position: relative;width: 100%;height: 100%;background: #aaa;}
+#sap-container iframe{display: block;width: 100%;height: 100%;border: none;}
+.btn-lg {
+  padding: 8px 26px;
+}
+</style>
+{% endblock %} 
+
+{% block content-nav %}
+{% endblock %}
+
+{% block body %}
+
+  <!-- Header -->
+  <div id="top-nav" class="navbar navbar-xs navbar-inverse navbar-fixed-top">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">{% block branding %}{{ site_title }}{% endblock %}</a>
+    </div>
+   <div>
+      <ul class="nav navbar-nav site-menu">
+          {% for sitem in site_menu %}
+          <li{% if sitem.selected %} class="active"{% endif %}>
+            <a href="{{ sitem.url }}">{% if sitem.icon %}<i class="fa-fw {{sitem.icon}}"></i>{% endif %} {{ sitem.title }}</a>
+          </li>
+          {% endfor %}
+      </ul>
+   </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        {% view_block 'top_navmenu' %}
+        {% if user.is_active and user.is_staff %}
+          <li class="dropdown g-user">
+          <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#" title="{% if user.profile and user.profile.mobile %}已绑定：{{ user.profile.mobile }}{% else %}未绑定手机{% endif %}">
+                <i class="fa fa-user"></i>
+                <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong> {% if user.profile and user.profile.agent %}[{{ user.profile.agent.number }}]{% endif %}<span class="caret"></span></a>
+            <ul id="g-account-menu" class="dropdown-menu" role="menu">
+              {% view_block 'top_account_menu' %}
+            </ul>
+          </li>
+        {% endif %}
+
+{% if user.profile and user.profile.agent %}
+        <li class="top-search-form">
+  <button type="button" sid="0" class="btn dropdown-toggle btn-success status-selected" data-toggle="dropdown">
+      <span class="status-display">{{ user.profile.agent.get_status_display }}</span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    {% for status in statusconfs  %}
+    <li><a class="status-select" sid="{{status.id}}">{{status.name}}</a></li>
+    {% endfor %}
+  </ul>
+        </li>
+{% endif %}
+
+        <li><a href="{% url 'xadmin:logout' %}"><i class="fa fa-sign-out"></i><span class="hide-sm">{% trans 'Log out' %}</span></a></li>
+      </ul>
+
+<div class="top-search-form navbar-right">
+  <div class="input-group">
+    <input id="to_number" name="to_number" class="form-control" type="text">
+    <span id="call-control" class="input-group-btn">
+      <button id="btn-keyboard" class="btn btn-default">
+        <i class="fa fa-lg fa-keyboard-o"></i></span>
+      </button>
+      <a id="dial-btn" class="btn btn-default btn-success" style="display:none;" title="点击发起呼叫">
+        <i class="fa fa-lg fa-phone"></i>
+      </a>
+      <a id="line-status" class="btn btn-default btn-warning" title="点击重新连接">
+        离线
+      </a>
+      <a id="cancel-call" class="btn btn-default btn-info" style="display:none;" title="点击取消">
+        呼叫中..
+      </a>
+      <a id="hangup-call-outcall" class="btn btn-default btn-danger" style="display:none;" title="点击挂断">
+        外呼中..
+      </a>
+      <a id="hangup-call-calling" class="btn btn-default btn-danger" style="display:none;" title="点击挂断">
+        通话中..
+      </a>
+ </span>
+ <div id="kb-well" class="well" style="position: absolute;top: 35px; left: 0px; display: none; padding: 10px;">
+              <div>
+                <button class="btn btn-default btn-lg">1</button>
+                <button class="btn btn-default btn-lg">2</button>
+                <button class="btn btn-default btn-lg">3</button>
+              </div>
+                <div>
+                <button class="btn btn-default btn-lg">4</button>
+                <button class="btn btn-default btn-lg">5</button>
+                <button class="btn btn-default btn-lg">6</button>
+              </div>
+             <div>
+                <button class="btn btn-default btn-lg">7</button>
+                <button class="btn btn-default btn-lg">8</button>
+                <button class="btn btn-default btn-lg">9</button>
+              </div>
+             <div>
+                <button class="btn btn-default btn-lg">#</button>
+                <button class="btn btn-default btn-lg">0</button>
+                <button class="btn btn-default btn-lg">#</button>
+              </div>
+             <div>
+                <button class="btn btn-default btn-lg">c</button>
+                <button class="btn btn-default btn-lg"><i class="fa fa-phone"></i></button>
+                <button class="btn btn-default btn-lg">x</button>
+              </div>
+
+</div>
+</div>
+</div>
+
+
+      {% view_block 'top_navbar' %}
+    </div>
+  </div>
+
+
+<div id="sap-container"></div>
+<script type="text/javascript" src="{% static "xadmin/js/iframer.js" %}"></script>
+<script type="text/javascript" src="{% static "base/js/long.js" %}"></script>
+<script type="text/javascript">
+    iframer.init({
+            //存放iframe的容器
+        default_url:'',
+        expect_class:'related-lookup',
+        container : document.getElementById('sap-container'),
+    });
+$(function(){
+        $(".site-menu a").click(function(){
+                iframer.jumpTo(this.pathname);
+                _tar = $(this).parent();
+                _tar.addClass('active');
+                _tar.siblings().removeClass('active');
+                return false;
+                });
+        $("#g-add-menu a,#g-account-menu a").click(function(){
+                iframer.jumpTo(this.pathname);
+                return false;
+                });
+
+
+
+    });
+$('#btn-keyboard').click(function(){
+  $("#kb-well").toggle();
+});
+</script>
+{% endblock %}

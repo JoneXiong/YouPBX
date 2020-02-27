@@ -12,7 +12,7 @@ class RingGroup(models.Model):
     
     class Meta:
         app_label = 'funcs'
-        verbose_name = u'呼叫队列'
+        verbose_name = u'队列设置'
         verbose_name_plural = verbose_name
     
     def __unicode__(self):
@@ -27,8 +27,22 @@ class RingGroupDevice(models.Model):
     
     class Meta:
         app_label = 'funcs'
-        verbose_name = u'呼叫队列成员分机'
+        verbose_name = u'队列成员分机'
         verbose_name_plural = verbose_name
     
     def __unicode__(self):
         return self.device
+    
+class RingGroupSkill():#(models.Model):
+    
+    ring_group = models.ForeignKey(RingGroup, verbose_name="所属队列", related_name='group_skills')
+    val = models.IntegerField('技能值', choices=[(1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'5')], default=1)
+    skill = models.ForeignKey('funcs.Skill', verbose_name="技能名称", related_name='skill_groups')
+    
+    class Meta:
+        app_label = 'funcs'
+        verbose_name = u'队列坐席'
+        verbose_name_plural = verbose_name
+    
+    def __unicode__(self):
+        return self.skill

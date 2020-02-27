@@ -1,0 +1,133 @@
+{% load i18n xadmin_tags %}
+<header class="main-header">
+    <!-- Logo -->
+    <a href="{% url 'xadmin:index' %}" class="logo" style="background-color: #1a2226;border-right: 1px solid #1a2226;color: #DFE4ED;">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini">{% block branding_mini %}<i class="fa fa-dashboard"></i>{% endblock %}</span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg">{% block branding %}<b>{{ site_title }}</b> {{ site_subtitle }}{% endblock %}</span>
+    </a>
+
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+
+
+{% block head_left %}
+<div class="navbar-header">
+    <ul class="nav navbar-top-links">
+{% if user.profile and user.profile.agent %}
+<div class="navbar-form navbar-left">
+  <div class="input-group" style="width:280px">
+    <input id="to_number" name="to_number" class="form-control" type="text">
+
+    <span id="call-control" class="input-group-btn">
+      <button id="btn-keyboard" class="btn btn-default">
+        <i class="fa fa-lg fa-keyboard-o"></i></span>
+      </button>
+      <a id="dial-btn" class="btn btn-primary" style="display:none;" title="点击发起呼叫">
+        <i class="fa fa-lg fa-phone"></i>
+      </a>
+      <a id="line-status" class="btn btn-warning" title="点击重新连接">
+        离线
+      </a>
+      <a id="cancel-call" class="btn btn-info" style="display:none;" title="点击取消">
+        呼叫中..
+      </a>
+      <a id="hangup-call-outcall" class="btn btn-danger" style="display:none;" title="点击挂断">
+        外呼中..
+      </a>
+      <a id="hangup-call-calling" class="btn btn-danger" style="display:none;" title="点击挂断">
+        通话中..
+      </a>
+     </span>
+
+     <div id="kb-well" class="well" style="position: absolute;top: 35px; left: 0px; display: none; padding: 10px;">
+                  <div>
+                    <button class="btn btn-default btn-lg">1</button>
+                    <button class="btn btn-default btn-lg">2</button>
+                    <button class="btn btn-default btn-lg">3</button>
+                  </div>
+                    <div>
+                    <button class="btn btn-default btn-lg">4</button>
+                    <button class="btn btn-default btn-lg">5</button>
+                    <button class="btn btn-default btn-lg">6</button>
+                  </div>
+                 <div>
+                    <button class="btn btn-default btn-lg">7</button>
+                    <button class="btn btn-default btn-lg">8</button>
+                    <button class="btn btn-default btn-lg">9</button>
+                  </div>
+                 <div>
+                    <button class="btn btn-default btn-lg">*</button>
+                    <button class="btn btn-default btn-lg">0</button>
+                    <button class="btn btn-default btn-lg">#</button>
+                  </div>
+                 <div>
+                    <button class="btn btn-default btn-lg">c</button>
+                    <button class="btn btn-default btn-lg"><i class="fa fa-phone"></i></button>
+                    <button class="btn btn-default btn-lg">x</button>
+                  </div>
+
+    </div>
+
+  </div>
+</div>
+{% endif %}
+</ul>
+</div>
+{% endblock %}
+
+
+
+    <div class="navbar-custom-menu">
+      <ul class="nav navbar-nav navbar-right">
+
+{% if user.profile and user.profile.agent %}
+                <li style="margin-top:8px;margin-right:6px">
+                <span id="reg-status" class="label label-warning">话机未注册</span>
+                <button class="btn btn-primary btn-sm" title="点击运行Web话机即可直接接听或拨打电话" id="btn-websip"><i class="fa fa-headphones"></i> Web话机</button>
+                </li>
+                <li>
+
+                </li>
+{% endif %}
+
+        {% view_block 'top_navmenu' %}
+        {% if user.is_active and user.is_staff %}
+          <li class="dropdown">
+            <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#" title="{% if user.profile and user.profile.mobile %}{% else %}未绑定手机{% endif %}">
+                <i class="fa fa-user"></i>
+            <strong>{% if user.profile and user.profile.agent %}{{ user.profile.agent.nickname }} [{{ user.profile.agent.number }}]{% else %}{{ user.username }}{% endif %}</strong> <span class="caret"></span></a>
+            <ul id="g-account-menu" class="dropdown-menu" role="menu">
+              {% view_block 'top_account_menu' %}
+            </ul>
+          </li>
+        {% endif %}
+
+{% if user.profile and user.profile.agent %}
+        <li style="margin-top:8px;margin-right:6px">
+  <button type="button" sid="0" class="btn dropdown-toggle btn-success status-selected" data-toggle="dropdown">
+      <span class="status-display">{{ user.profile.agent.get_status_display }}</span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    {% for status in statusconfs  %}
+    <li><a class="status-select" sid="{{status.id}}">{{status.name}}</a></li>
+    {% endfor %}
+  </ul>
+  <span id="agent-status-timer">00:00:00</span>
+        </li>
+{% endif %}
+
+        <li><a href="{% url 'xadmin:logout' %}"><i class="fa fa-sign-out"></i><span class="hide-sm">{% trans 'Log out' %}</span></a></li>
+      </ul>
+    </div>
+  </nav>
+</header>

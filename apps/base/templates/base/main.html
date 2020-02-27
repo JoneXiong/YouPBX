@@ -1,0 +1,322 @@
+{% load i18n xadmin_tags %}
+
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>主页 | {{ site_title }}</title>
+
+    <link href="/static/inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- 通知插件 Toastr style -->
+    <link href="/static/inspinia/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <link href="/static/inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+    <link href="/static/inspinia/css/animate.css" rel="stylesheet">
+    <link href="/static/inspinia/css/style.css" rel="stylesheet">
+    <link href="/static/xadmin/css/xadmin.frame.css" rel="stylesheet">
+
+{% block extrastyle %}
+<style style="text/css">
+body,html{margin: 0;padding 0;height: 100%;}
+#sap-container{position: relative;width: 100%;height: 100%;background: #aaa;}
+#sap-container iframe{display: block;width: 100%;height: 100%;border: none;}
+.btn-lg {
+  padding: 8px 26px;
+}
+.chat-user{
+  padding: 4px 5px;
+}
+</style>
+{% endblock %} 
+
+</head>
+
+<body class="full-height-layout">
+    <div id="wrapper">
+        <!--左侧导航开始-->
+        <nav class="navbar-default navbar-static-side" role="navigation" style="height:100%">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element"> 
+                        <span>
+                            <A href="https://github.com/JoneXiong/DjangoX" target="_blank"><h1>{{ site_title }}</h1></A>
+                            <!--<img alt="image" class="img-circle"
+                            src="img/profile_small.jpg" />-->
+                        </span>
+
+                        </div>
+                        <div class="logo-element">
+                            DjX
+                        </div>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{% url 'xadmin:index' %}" data-index="0"><i class="fa fa-home"></i>
+                            <span class="nav-label">主页</span></a>
+                    </li>
+                        {% if user.profile and user.profile.agent %}
+
+                                {% for queue in queues %}
+                                <li{% if forloop.first %} class="active"{% endif %}>
+                                   <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">{{ queue.name }}</span> <span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level collapse">
+                                        {% for agent in queue.agents %}
+                                        <li>
+                                        <a href="#"><i class="fa fa-lg fa-user" style="color:{{ agent.status_color }};"></i> {{agent.number}} {% firstof agent.nickname '' %} <span class="label label-{{ agent.status_style }} pull-right" id="agent-{{ agent.number }}">{{ agent.status_show }}</span></a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                {% endfor %}
+
+                        {% endif%}
+
+                    
+    {% block navbar %}
+        {% if nav_menu %}
+          {% include menu_template %}
+        {% else %}
+          <p></p>
+        {% endif %}
+    {% endblock %}
+
+                    <a id="bill-open" class="J_menuItem" href="" style="display:none">话单弹屏</a>
+                </ul>
+
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+
+
+    <div class="navbar-header">
+
+
+      <ul class="nav navbar-top-links">
+
+
+        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            
+
+        {% view_block 'top_navbar' %}
+{% if user.profile and user.profile.agent %}
+<div class="navbar-form navbar-left">
+  <div class="input-group">
+    <input id="to_number" name="to_number" class="form-control" type="text">
+
+    <span id="call-control" class="input-group-btn">
+      <button id="btn-keyboard" class="btn btn-default">
+        <i class="fa fa-lg fa-keyboard-o"></i></span>
+      </button>
+      <a id="dial-btn" class="btn btn-success" style="display:none;" title="点击发起呼叫">
+        <i class="fa fa-lg fa-phone"></i>
+      </a>
+      <a id="line-status" class="btn btn-warning" title="点击重新连接">
+        离线
+      </a>
+      <a id="cancel-call" class="btn btn-info" style="display:none;" title="点击取消">
+        呼叫中..
+      </a>
+      <a id="hangup-call-outcall" class="btn btn-danger" style="display:none;" title="点击挂断">
+        外呼中..
+      </a>
+      <a id="hangup-call-calling" class="btn btn-danger" style="display:none;" title="点击挂断">
+        通话中..
+      </a>
+     </span>
+
+     <div id="kb-well" class="well" style="position: absolute;top: 35px; left: 0px; display: none; padding: 10px;">
+                  <div>
+                    <button class="btn btn-default btn-lg">1</button>
+                    <button class="btn btn-default btn-lg">2</button>
+                    <button class="btn btn-default btn-lg">3</button>
+                  </div>
+                    <div>
+                    <button class="btn btn-default btn-lg">4</button>
+                    <button class="btn btn-default btn-lg">5</button>
+                    <button class="btn btn-default btn-lg">6</button>
+                  </div>
+                 <div>
+                    <button class="btn btn-default btn-lg">7</button>
+                    <button class="btn btn-default btn-lg">8</button>
+                    <button class="btn btn-default btn-lg">9</button>
+                  </div>
+                 <div>
+                    <button class="btn btn-default btn-lg">*</button>
+                    <button class="btn btn-default btn-lg">0</button>
+                    <button class="btn btn-default btn-lg">#</button>
+                  </div>
+                 <div>
+                    <button class="btn btn-default btn-lg">c</button>
+                    <button class="btn btn-default btn-lg"><i class="fa fa-phone"></i></button>
+                    <button class="btn btn-default btn-lg">x</button>
+                  </div>
+
+    </div>
+
+  </div>
+</div>
+{% endif %}
+
+      </ul>
+
+    </div>
+
+
+
+
+
+            <ul class="nav navbar-top-links navbar-right">
+
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span class="label label-primary"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="#">
+                                    <strong>查看更多通知</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+{% if user.profile and user.profile.agent %}
+                <li>
+                <span id="reg-status" class="label label-warning">话机未注册</span>
+                </li>
+                <li>
+                <button class="btn btn-success btn-sm" title="点击运行Web话机即可直接接听或拨打电话" id="btn-websip"><i class="fa fa-headphones"></i> Web话机</button>
+                </li>
+{% endif %}
+        {% view_block 'top_navmenu' %}
+        {% if user.is_active and user.is_staff %}
+          <li class="dropdown g-user">
+          <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#" title="{% if user.profile and user.profile.mobile %}{% else %}未绑定手机{% endif %}">
+                <i class="fa fa-user"></i>
+                {% if user.profile and user.profile.agent %}{{ user.profile.agent.nickname }} [{{ user.profile.agent.number }}]{% else %}{{ user.username }}{% endif %}<span class="caret"></span></a>
+            <ul id="g-account-menu" class="dropdown-menu" role="menu">
+              {% view_block 'top_account_menu' %}
+            </ul>
+          </li>
+        {% endif %}
+
+{% if user.profile and user.profile.agent %}
+        <li class="top-search-form">
+  <button type="button" sid="0" class="btn dropdown-toggle btn-primary status-selected" data-toggle="dropdown">
+      <span class="status-display">{{ user.profile.agent.get_status_display }}</span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    {% for status in statusconfs  %}
+    <li><a class="status-select" sid="{{status.id}}">{{status.name}}</a></li>
+    {% endfor %}
+  </ul>
+  <span id="agent-status-timer">00:00:00</span>
+        </li>
+{% endif %}
+
+
+        <li><a href="{% url 'xadmin:logout' %}"><i class="fa fa-sign-out"></i><span class="hide-sm">{% trans 'Log out' %}</span></a></li>
+
+            </ul>
+
+        </nav>
+        </div>
+
+
+            <div class="row content-tabs">
+                <button class="roll-nav roll-left" onclick="history.go(-1)"><i class="fa fa-arrow-left"></i>
+                <!--<button class="roll-nav roll-left J_tabLeft"><i class="fa fa-caret-left"></i>-->
+                </button>                
+                <nav class="page-tabs J_menuTabs">
+                    <div class="page-tabs-content">
+                        <a href="javascript:;" class="active J_menuTab"
+                            data-id="{% url 'xadmin:index' %}">主页</a>
+                    </div>
+                </nav>
+                <!--<button class="roll-nav roll-right J_tabRight"><i class="fa fa-caret-right"></i></button>-->
+                <div class="btn-group roll-nav roll-right">
+                    <button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span></button>
+                    <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                        <!--<li class="J_tabShowActive"><a>定位当前选项卡</a></li>-->
+                        <!--<li class="J_tabCloseCurr"><a>关闭当前选项卡</a></li>-->
+                        <li class="J_tabRefresh"><a>刷新当前选项卡</a></li>
+                        <li class="divider"></li>
+                        <li class="J_tabCloseLeft"><a>关闭左侧选项卡</a></li>
+                        <li class="J_tabCloseRight"><a>关闭右侧选项卡</a></li>
+                        <li class="J_tabCloseOther"><a>关闭其他选项卡</a></li>
+                        <li class="J_tabCloseAll"><a>关闭全部选项卡</a></li>
+                    </ul>
+                </div>
+                <a href="#" class="roll-nav roll-right J_tabExit J_tabRefresh"><i class="fa fa fa-refresh"></i> 刷新</a>
+            </div>
+            <!-- 右侧iframe展示区域  -->
+            <div class="row J_mainContent" id="content-main">
+                <iframe class="J_iframe" name="iframe0" width="100%"
+                    height="100%" src="{% url 'xadmin:index' %}" frameborder="0" data-id="{% url 'xadmin:index' %}" seamless></iframe>
+            </div>
+            
+            <!-- 底部footer展示区域  -->
+            <div class="footer">
+                <!--
+                <div class="pull-right">&copy; 2015-2016 <a
+                        href="https://github.com/JoneXiong/DjangoX" target="_blank">{{ site_footer }}</a>
+                        -->
+                </div>
+            </div>
+
+        </div>
+        
+        
+    </div>
+
+    <!-- 遮罩层start -->
+    <div class="top-sild-mask" id="top-sild-mask"></div>
+    <div class="left-sild-mask" id="left-sild-mask"></div>
+    <div class="bottom-sild-mask" id="bottom-sild-mask"></div>
+    <!-- 遮罩层end -->
+    <div class="loading-content" style="left: 684px;top: 114.5px;display:none">数据加载中，请稍后…</div>
+
+    <!-- Mainly scripts -->
+    <script src="/static/inspinia/js/jquery-2.1.1.js"></script>
+    <script src="/static/inspinia/js/bootstrap.min.js"></script>
+    <script src="/static/inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/static/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/static/inspinia/js/inspinia.js"></script>
+    <script src="/static/inspinia/js/plugins/pace/pace.min.js"></script>
+
+    <!-- Toastr -->
+    <script src="/static/inspinia/js/plugins/toastr/toastr.min.js"></script>
+    <script src="/static/inspinia/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script src="/static/inspinia/js/contabs.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript" src="{% static "base/js/long.js" %}?v=0.4"></script>
+
+
+
+    <script>
+        $(document).ready(function() {
+            //setTimeout(function() {
+            //}, 1300);
+        });
+
+    </script>
+</body>
+</html>
