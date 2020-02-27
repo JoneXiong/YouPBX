@@ -63,3 +63,4 @@ upload/
 migrations/
 config.py
 data.db
+xadmin
