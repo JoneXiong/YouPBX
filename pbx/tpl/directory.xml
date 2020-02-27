@@ -5,12 +5,12 @@
   <domain name="$${location_{{ location.id }}}">
     <variables>
     	<variable name="language" value="zh"/>
-	    <variable name="default_language" value="zh"/>
+	<variable name="default_language" value="zh"/>
     </variables>
     <groups>
       <group name="default">
         <users>
-          {% for endpoint  in location.devices.all() %}
+          {% for endpoint  in location.devices.order_by("id") %}
           <user bluebox_id="{{ endpoint.id }}" id="{{ endpoint.number.number }}">
             <params>
                 {% if endpoint.sip_password %}
@@ -27,6 +27,9 @@
 	            <param name="vm-message-ext" value="mp3"/>-->#}
             </params>
             <variables>
+				{% if endpoint.sip_username %}
+			<variable name="effective_caller_id_name" value="{{ endpoint.sip_username }}"/>
+				{% endif %}
             	{% if endpoint.outbound_caller_id_name %}
 	            <variable name="outbound_caller_id_name" value="{{ endpoint.callerid_external_name }}"/>
 				{% endif %}

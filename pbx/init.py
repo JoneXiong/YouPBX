@@ -6,10 +6,7 @@ from apps.base.models import SipInterface, Location
 
 fs_conf_path = None
 
-def get_ip_list():
-    ips = os.popen("/sbin/ifconfig | grep 'inet addr' | awk '{print $2}'").read()
-    ips = ips.split('\n')
-    return [e.replace('addr:', '') for e in ips if e]
+
 
 def create_sipinterface_with_ip(ip):
     # Authenticated
@@ -18,7 +15,7 @@ def create_sipinterface_with_ip(ip):
         obj = SipInterface()
         obj.name = 'Authenticated SIP on %s'%ip
         obj.ip_address = ip
-        obj.port = 5060
+        obj.sip_port = 5060
         obj.nat_net_list_id = 2
         #obj.inbound_net_list_id = 5
         obj.context_id = 1
@@ -30,47 +27,15 @@ def create_sipinterface_with_ip(ip):
         obj = SipInterface()
         obj.name = 'Unauthenticated SIP on %s'%ip
         obj.ip_address = ip
-        obj.port = 5080
+        obj.sip_port = 5080
         obj.nat_net_list_id = 2
         obj.context_id = 1
         obj.auth = False
         obj.save()
-    
-def get_sipinterface_default_ip_list():
-    ret = []
-    ip_list = get_ip_list()
-    for ip in ip_list:
-        if (not ip.startswith('127.0.0.1') ) and (not ip.startswith('169.254.') ):
-            ret.append(ip)
-    return ret
 
-def create_default_Sipinterface():
-    # generate default sip_profiles
-    ip_list = get_ip_list()
-    for ip in ip_list:
-        if (not ip.startswith('127.0.0.1') ) and (not ip.startswith('169.254.') ):
-            # Authenticated
-            obj = SipInterface()
-            obj.name = 'Authenticated SIP on %s'%ip
-            obj.ip_address = ip
-            obj.port = 5060
-            obj.nat_net_listi_id = 2
-            #obj.inbound_net_list_id = 5
-            obj.context = 2 # Publicly Accessible
-            obj.auth = True
-            # ...
-            obj.save()
-            # Unauthenticated
-            obj = SipInterface()
-            obj.name = 'Unauthenticated SIP on %s'%ip
-            obj.ip_address = ip
-            obj.port = 5080
-            obj.nat_net_list = 2
-            obj.context = 2 # Publicly Accessible
-            obj.auth = False
-            # ...
-            obj.save()
-    
+
+
+
 def create_default_location():
     # generate default location
     import socket
@@ -81,9 +46,9 @@ def create_default_location():
     obj.domain_name = myaddr
     obj.save()
 
-def xml_init(fs_conf_path):
+def fs_conf_dir_init(fs_conf_path):
     u'''
-    delete sip_profiles root file; delete directory default.xml; 
+    delete sip_profiles root file; delete directory default.xml;
     delete autoload_configs conference.conf.xml and acl.conf.xml
     add autoload_configs locations.conf.xml and odbc.conf.xml
     add sip_profiles  oe_sipinterfaces.xml
@@ -104,7 +69,7 @@ def xml_init(fs_conf_path):
         os.mkdir(bak_path)
     m_path = os.path.join(sip_profiles_path,'default.xml')
     shutil.move(m_path, bak_path)
-    
+
     # autoload_configs init
     sip_profiles_path = os.path.join(fs_conf_path, 'autoload_configs')
     bak_path = os.path.join(sip_profiles_path, 'bak')
@@ -114,9 +79,7 @@ def xml_init(fs_conf_path):
     shutil.move(m_path, bak_path)
     m_path_acl = os.path.join(sip_profiles_path,'acl.conf.xml')
     shutil.move(m_path_acl, bak_path)
-    
-def main():
-    xml_init(fs_conf_path)
-    
+
+
 if __name__=="__main__":
-    main()
+    fs_conf_dir_init(fs_conf_path)

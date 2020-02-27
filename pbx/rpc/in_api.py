@@ -16,12 +16,13 @@ def api(cmd, bg=False, ok_check=True):
     if not inbound_event_listener:
         try:
             event_socket.connect()
-        except ConnectError, e:
+        except Exception, e:
+            log.error("connect failed: %s" % str(e))
             return {'code': -9, 'msg': 'connect failed !', 'data': data}
     if not inbound_event_listener.connected:
         try:
             inbound_event_listener.connect()
-        except ConnectError, e:
+        except Exception, e:
             log.error("connect failed: %s" % str(e))
             return {'code': -9, 'msg': 'connect failed !', 'data': data}
     fs_bg_api_string = cmd

@@ -16,7 +16,7 @@
 			max-failures="{{ menu.registry_max_failures }}" >
 		{% for keymapping  in menu.keymappings.all() %}
     		{% if loop.first %}
-    		<entry action="menu-exec-app" name="catch_all" digits="/^([0-9]{{ '{' ~ extension_digits ~ '}' }})$/" param="execute_extension $1 XML context_1" />
+    		{#<entry action="menu-exec-app" name="catch_all" digits="/^([0-9]{{ '{' ~ extension_digits ~ '}' }})$/" param="execute_extension $1 XML context_1" />#}
     		{% endif %}
     		
     		{% if keymapping.action_type=='parent' %}

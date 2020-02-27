@@ -10,8 +10,6 @@
         <action application="set" bluebox="settingRingXfer" data="transfer_ringback=${us-ring}"/>
         <action application="export" bluebox="sipCalleeIdName" data="sip_callee_id_name={{ object.name }}"/>
         <action application="export" bluebox="sipCalleeIdNumber" data="sip_callee_id_number={{ object.number.number }}"/>
-        <!--<action application="set" data="RECORD_ANSWER_REQ=true"/>-->
-        <!--<action application="record_session" data="$${recordings_dir}/${uuid}.wav"/>-->
         <action application="export" data="execute_on_answer=record_session $${recordings_dir}/${uuid}.wav"/>
         <action application="bridge" data="user/{{ object.number.number }}@$${location_{{ object.number.location.id }}}"/>
 		{% if object.number.terminate_action == 'voicemail' %}
