@@ -7,3 +7,4 @@ import sys_info_page
 import time_zone_set_form
 import sip_interface_auto_conf_form
 from fs_conf_form import FsConf
+from . import fs_sync_xml_form

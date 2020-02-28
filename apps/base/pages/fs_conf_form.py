@@ -42,4 +42,9 @@ class FsConf(ConfigFormPage):
         ret['fs_xml_init'] = False
         return ret
 
+    def get_nav_btns(self):
+        return [
+            '''<a href="/xadmin/page/syncxml/?_redirect=/xadmin/page/fsconf/" class="btn btn-primary"><i class="fa fa-inbox"></i> 同步数据到FS</a> '''
+        ]
+
 site.register_page(FsConf)
