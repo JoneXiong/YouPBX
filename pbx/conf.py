@@ -66,7 +66,10 @@ def ivr_menus(fs_conf_path):
     u'''
     ivr_menus
     '''
-    from apps.extend.models import IVR
+    try:
+        from apps.extend.models import IVR
+    except:
+        return
     menus = IVR.objects.all()
     m_data = jinja2_template('ivr_menus.xml', menus=menus)
     m_file = os.path.join(fs_conf_path,'ivr_menus', 'oe_ivr.xml')
@@ -139,9 +142,13 @@ def dialplan(fs_conf_path):
         if not contexts.has_key(ct):contexts[ct]={}
         contexts[ct]['endtype'] = vm.end_type
         contexts[ct]['tts_string'] = vm.tts_string
-        contexts[ct]['media_file'] = vm.media_file
-    from apps.extend.models import Extension
-    all_extens = Extension.objects.all()
+        if hasattr(vm, 'media_file'):
+            contexts[ct]['media_file'] = vm.media_file
+    try:
+        from apps.extend.models import Extension
+        all_extens = Extension.objects.all()
+    except:
+        all_extens = []
     for exten in all_extens:
         ct = 1#vm.number.context.id
         if not contexts.has_key(ct):contexts[ct]={}

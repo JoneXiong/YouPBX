@@ -4,14 +4,12 @@
         <field type="CharField" name="name">内部</field>
         <field type="CharField" name="media_mode">psp</field>
         <field type="CharField" name="end_type">tts</field>
-        <field to="base.mediafile" name="media_file" rel="ManyToOneRel"><None></None></field>
         <field type="TextField" name="tts_string">您好，您拨的号码无效，请查证后再拨！</field>
     </object>
     <object pk="2" model="base.context">
         <field type="CharField" name="name">外部</field>
         <field type="CharField" name="media_mode">psp</field>
         <field type="CharField" name="end_type">tts</field>
-        <field to="base.mediafile" name="media_file" rel="ManyToOneRel"><None></None></field>
         <field type="TextField" name="tts_string">您好，您拨的号码无效，请查证后再拨！</field>
     </object>
     <object pk="1" model="base.location">
