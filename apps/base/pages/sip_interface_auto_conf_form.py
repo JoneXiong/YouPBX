@@ -29,7 +29,29 @@ class SipInterfaceAutoConf(FormPage):
         if ips:
             for ip in ips:
                 init.create_sipinterface_with_ip(ip)
-        else:
-            init.create_sipinterface_with_ip('')
+                from apps.common import ReXmlAdmin
+                ReXmlAdmin()._rexml()
     
 site.register_page(SipInterfaceAutoConf)
+
+class SipInterfaceCreateByIP(FormPage):
+    
+    verbose_name = u'通过IP创建'
+    app_label = 'base'
+    hidden_menu = True
+    
+    def prepare_form(self):
+        class MyForm(forms.Form):
+            ip = forms.CharField(label='填写IP')
+        self.view_form = MyForm
+            
+    @filter_hook
+    def save_forms(self):
+        data = self.form_obj.cleaned_data
+        ip = data.get('ip')
+        if ip:
+            init.create_sipinterface_with_ip(ip)
+            from apps.common import ReXmlAdmin
+            ReXmlAdmin()._rexml()
+    
+site.register_page(SipInterfaceCreateByIP)
