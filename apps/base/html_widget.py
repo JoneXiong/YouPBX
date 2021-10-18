@@ -1,4 +1,9 @@
 # coding=utf-8
+import requests
+import base64
+import json
+
+from django.conf import settings
 
 from xadmin.utils import fa_icon
 from xadmin.views.dashwidget import HtmlWidget, widget_manager
@@ -16,11 +21,11 @@ class PbxStatusWidget(HtmlWidget):
         return True
 
     def context(self, context):
-        from pbx.rpc import in_api
-        res = in_api.status()
+        r = requests.get(settings.FS_AGW_URL + '/base_status')
+        res = json.loads(r.text)
         if res['code']==0:
             content = ''
-            lines = res['data']['body'].split('\n')
+            lines = base64.b64decode(res['data']).split('\n')
             content += '<b>运行时间</b>：%s 分<hr/>'%lines[0].split('minutes,')[0].replace('UP ','').replace('years','年').replace('days','天').replace('hours','小时')
             content += '<b>总会话数</b>：%s<hr/>'%lines[2].split(' session')[0]
             content += '<b>会话详情</b>：当前 %s<hr/>'%lines[3].replace('session(s) - peak',' &nbsp;&nbsp峰值').replace(', last 5min',' &nbsp;&nbsp最近5分钟')
@@ -41,9 +46,9 @@ class SofiaStatusWidget(HtmlWidget):
         return True
 
     def context(self, context):
-        from pbx.rpc import in_api
-        res = in_api.sofia_status()
+        r = requests.get(settings.FS_AGW_URL + '/sofia_status')
+        res = json.loads(r.text)
         if res['code']==0:
-            context['content'] = '%s'%res['data']['body'].replace('\n','<br/>')
+            context['content'] = '%s'%base64.b64decode(res['data']).replace('\n','<br/>')
         else:
             context['content'] = '获取失败'

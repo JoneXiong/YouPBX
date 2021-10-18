@@ -2,9 +2,12 @@
 
 import threading
 import time
+import requests
+import json
+
+from django.conf import settings
 
 from pbx import conf
-from pbx.rpc import in_api
 from base.pages import FsConf
 
 
@@ -17,7 +20,8 @@ class make_xml_thread(threading.Thread):
     def run(self):
         if self.interval:time.sleep(self.interval)
         conf.gen_all(self.fs_conf_path)
-        in_api.reload_xml()
+        r = requests.get(settings.FS_AGW_URL +'/reloadxml')
+        res = json.loads(r.text)
 
 class ReXmlAdmin(object):
 

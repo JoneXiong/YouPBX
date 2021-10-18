@@ -11,10 +11,8 @@ event_socket_conf = {
                      'port': 8021,
                      'pwd': 'ClueCon'
                      }
+fs_agw_url = 'http://127.0.0.1:8121'
 
-fs_db_path = '/usr/local/freeswitch/db/'
-
-fs_sounds_path = '/usr/local/freeswitch/sounds'
 
 main_server_conf = {
     'host': '0.0.0.0',
