@@ -11,7 +11,7 @@ event_socket_conf = {
                      'port': 8021,
                      'pwd': 'ClueCon'
                      }
-fs_agw_url = 'http://127.0.0.1:8121'
+FS_AGW_URL = 'http://127.0.0.1:8121'
 
 
 main_server_conf = {
